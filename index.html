@@ -634,7 +634,7 @@
 
         function playNextTrack() {
             bgMusic.src = MUSIC_PLAYLIST[currentTrackIndex];
-            bgMusic.volume = 0.15;
+            bgMusic.volume = 0.10;
             bgMusic.play().catch(e => console.log("Audio en espera: ", e));
             currentTrackIndex = (currentTrackIndex + 1) % MUSIC_PLAYLIST.length;
         }
