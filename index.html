@@ -30,7 +30,7 @@
             font-family: 'JetBrains Mono', monospace;
             overflow: hidden;
             position: relative;
-            transition: color 0.5s ease;
+            transition: color 0.3s ease;
         }
 
         body.sleeping-mode {
@@ -49,7 +49,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.3s ease;
         }
 
         #initOverlay h2 {
@@ -80,7 +80,7 @@
             cursor: pointer;
             box-shadow: var(--cyan-glow);
             border-radius: 4px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .btn-init:hover {
@@ -104,7 +104,7 @@
             backdrop-filter: blur(4px);
             opacity: 0;
             transform: translateY(-20px);
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
 
         body.sleeping-mode .school-logo-container {
@@ -120,7 +120,7 @@
         .school-logo-container img {
             height: 32px;
             object-fit: contain;
-            transition: filter 0.5s ease;
+            transition: filter 0.3s ease;
         }
 
         .hud-canvas {
@@ -152,7 +152,7 @@
             stroke: rgba(255, 51, 51, 0.35);
             stroke-width: 1.5;
             stroke-dasharray: 4 2;
-            transition: stroke 0.5s ease;
+            transition: stroke 0.3s ease;
         }
         body.sleeping-mode .hud-line {
             stroke: rgba(0, 229, 255, 0.6);
@@ -182,7 +182,7 @@
             justify-content: center;
             animation: core-pulse 4s ease-in-out infinite;
             cursor: pointer;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
 
         .jarvis-reactor.listening {
@@ -247,7 +247,7 @@
             backdrop-filter: blur(4px);
             opacity: 0;
             transform: scale(0.5);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, border-color 0.5s ease;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease, border-color 0.3s ease;
         }
 
         body.sleeping-mode .hud-node {
@@ -277,7 +277,7 @@
         .hud-node .node-subtitle {
             color: #ff8888;
             font-size: 0.65rem;
-            transition: color 0.5s ease;
+            transition: color 0.3s ease;
         }
         body.sleeping-mode .hud-node .node-subtitle {
             color: #88eeff;
@@ -293,7 +293,10 @@
         #node-podcast.visible { transform: translateY(-50%) scale(1); }
         #node-podcast:hover { transform: translateY(-50%) scale(1.05) !important; }
 
-        #node-quienes       { top: 75%; right: 10%; }
+        /* Nodo Quienes Somos centrado en la parte inferior */
+        #node-quienes       { bottom: 15%; left: 50%; transform: translateX(-50%) scale(0.5); text-align: center; }
+        #node-quienes.visible { transform: translateX(-50%) scale(1); }
+        #node-quienes:hover { transform: translateX(-50%) scale(1.05) !important; }
 
         .commands-guide {
             position: absolute;
@@ -308,7 +311,7 @@
             z-index: 10;
             backdrop-filter: blur(4px);
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: opacity 0.3s ease;
             max-width: 260px;
         }
         body.sleeping-mode .commands-guide {
@@ -350,7 +353,7 @@
             align-items: center;
             gap: 12px;
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: all 0.3s ease;
         }
         body.sleeping-mode .hud-header-status {
             border-color: var(--sleep-color);
@@ -411,7 +414,7 @@
             z-index: 10;
             backdrop-filter: blur(4px);
             opacity: 0;
-            transition: all 0.5s ease;
+            transition: opacity 0.3s ease;
             display: flex;
             flex-direction: column;
             gap: 6px;
@@ -455,7 +458,7 @@
             justify-content: center;
             z-index: 200;
             pointer-events: none;
-            transition: background 0.4s ease, backdrop-filter 0.4s ease;
+            transition: background 0.25s ease, backdrop-filter 0.25s ease;
         }
 
         .holo-modal.active {
@@ -477,7 +480,7 @@
             overflow: hidden;
             transform: scale(0.9);
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         body.sleeping-mode .holo-content-box {
             border-color: var(--sleep-color);
@@ -495,7 +498,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.5s ease;
+            transition: border-color 0.3s ease;
         }
         body.sleeping-mode .holo-header {
             background: rgba(0, 229, 255, 0.1);
@@ -528,7 +531,7 @@
             font-size: 0.85rem;
             line-height: 1.6;
             color: #ffbbbb;
-            transition: color 0.5s ease;
+            transition: color 0.3s ease;
         }
         body.sleeping-mode .holo-body {
             color: #bbffff;
@@ -582,7 +585,7 @@
         <line x1="220" y1="50%" x2="42%" y2="50%" class="hud-line" />
         <line x1="calc(100% - 220px)" y1="25%" x2="58%" y2="50%" class="hud-line" />
         <line x1="calc(100% - 220px)" y1="50%" x2="58%" y2="50%" class="hud-line" />
-        <line x1="calc(100% - 220px)" y1="75%" x2="58%" y2="50%" class="hud-line" />
+        <line x1="50%" y1="calc(100% - 100px)" x2="50%" y2="58%" class="hud-line" />
     </svg>
 
     <div class="hud-node" id="node-investigacion" onclick="openModal('investigacion')">
@@ -679,13 +682,13 @@
                 commandsGuide.classList.add('visible');
                 musicControlPanel.classList.add('visible');
                 nodes.forEach((node, index) => {
-                    setTimeout(() => node.classList.add('visible'), index * 80);
+                    setTimeout(() => node.classList.add('visible'), index * 50);
                 });
                 
                 setTimeout(() => {
-                    speak("Bienvenido. Yo soy Atlas, tu asistente personal y presentador del proyecto Irtra Scan Pass. Todos los subsistemas están listos.");
-                }, 400);
-            }, 400);
+                    speak("Sistemas listos.");
+                }, 200);
+            }, 300);
 
             isListening = true;
             reactor.classList.add('listening');
@@ -698,44 +701,38 @@
 
         function initBackgroundListener() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                console.warn("SpeechRecognition no soportado en este navegador.");
-                return;
-            }
+            if (!SpeechRecognition) return;
             if (recognition) return;
 
             recognition = new SpeechRecognition();
             recognition.continuous = true;
             recognition.lang = 'es-ES';
-            recognition.interimResults = false;
+            recognition.interimResults = true; // Permite capturar resultados intermedios para mayor velocidad
 
             recognition.onresult = (event) => {
                 const results = event.results;
                 const latestResult = results[results.length - 1];
-                if (!latestResult.isFinal) return;
-                
                 const transcript = latestResult[0].transcript.toLowerCase().trim();
                 
-                if (transcript.length > 1 && systemInitialized) {
+                // Procesar comandos de forma rápida incluso en resultados intermedios si coinciden con palabras clave
+                if (transcript.length > 2 && systemInitialized) {
                     const now = Date.now();
-                    if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 3000)) {
+                    if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 1500)) {
                         return;
                     }
-                    lastProcessedCommand = transcript;
-                    lastCommandTimestamp = now;
-
-                    processVoiceCommand(transcript);
+                    
+                    if (processVoiceCommand(transcript)) {
+                        lastProcessedCommand = transcript;
+                        lastCommandTimestamp = now;
+                    }
                 }
             };
 
             recognition.onerror = (event) => {
-                console.warn("Error de reconocimiento de voz: ", event.error);
-                if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
+                if (isListening && !isSleeping) {
                     setTimeout(() => {
-                        if (isListening && !isSleeping) {
-                            try { recognition.start(); } catch(e) {}
-                        }
-                    }, 500);
+                        try { recognition.start(); } catch(e) {}
+                    }, 200);
                 }
             };
 
@@ -747,15 +744,13 @@
 
             try {
                 recognition.start();
-            } catch(e) {
-                console.error("No se pudo iniciar el reconocimiento de voz inicial:", e);
-            }
+            } catch(e) {}
         }
 
         function loadVoices() {
             if (!('speechSynthesis' in window)) return;
             const voices = window.speechSynthesis.getVoices();
-            selectedVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Pablo') || v.name.includes('Raul') || v.name.includes('Jorge') || v.name.includes('Microsoft'))) || voices.find(v => v.lang.startsWith('es')) || voices[0];
+            selectedVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Microsoft'))) || voices.find(v => v.lang.startsWith('es')) || voices[0];
         }
 
         if ('speechSynthesis' in window) {
@@ -769,12 +764,10 @@
                 const utterance = new SpeechSynthesisUtterance(text);
                 if (selectedVoice) utterance.voice = selectedVoice;
                 utterance.lang = 'es-ES';
-                utterance.rate = 1.05; 
+                utterance.rate = 1.15; // Velocidad de voz optimizada y más rápida
                 utterance.pitch = 1.0; 
                 
-                if (callback) {
-                    utterance.onend = callback;
-                }
+                if (callback) utterance.onend = callback;
                 window.speechSynthesis.speak(utterance);
             } else if (callback) {
                 callback();
@@ -809,7 +802,7 @@
         }
 
         function processVoiceCommand(cmd) {
-            if (cmd.includes('despierta') || cmd.includes('atlas despierta')) {
+            if (cmd.includes('despierta')) {
                 if (isSleeping) {
                     document.body.classList.remove('sleeping-mode');
                     reactor.classList.remove('sleeping');
@@ -824,43 +817,52 @@
                 statusDot.className = 'status-indicator listening';
                 statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
                 micBtn.innerText = 'APAGAR MIC';
-                speak("Sistemas reactivados y escuchando.");
-                return;
+                speak("Sistemas reactivados.");
+                return true;
             }
 
-            if (isSleeping) return;
+            if (isSleeping) return false;
 
-            if (cmd.includes('abre documento') || cmd.includes('investigación') || cmd.includes('investigacion')) { 
+            if (cmd.includes('documento') || cmd.includes('investigación')) { 
                 openModal('investigacion'); 
+                return true;
             }
-            else if (cmd.includes('abre el circuito') || cmd.includes('abre circuito')) { 
+            if (cmd.includes('circuito')) { 
                 openModal('circuito'); 
+                return true;
             }
-            else if (cmd.includes('pon el reto') || cmd.includes('abre reto')) { 
+            if (cmd.includes('pon el reto') || cmd.includes('reto')) { 
                 openModal('reto'); 
+                return true;
             }
-            else if (cmd.includes('abre infografía') || cmd.includes('infografia') || cmd.includes('infografía')) { 
+            if (cmd.includes('infografía') || cmd.includes('infografia')) { 
                 openModal('infografia'); 
+                return true;
             }
-            else if (cmd.includes('abre el podcast') || cmd.includes('podcast')) { 
+            if (cmd.includes('podcast')) { 
                 openModal('podcast'); 
+                return true;
             }
-            else if (cmd.includes('presenta el equipo') || cmd.includes('quienes somos') || cmd.includes('quiénes somos') || cmd.includes('presenta al equipo')) { 
+            if (cmd.includes('equipo') || cmd.includes('quiénes somos') || cmd.includes('quienes somos')) { 
                 openModal('quienes'); 
+                return true;
             }
-            else if (cmd.includes('reproduce música') || cmd.includes('reproducir música')) {
+            if (cmd.includes('reproduce música')) {
                 bgMusic.play();
-                speak("Reproduciendo música.");
+                speak("Música activada.");
+                return true;
             }
-            else if (cmd.includes('para música') || cmd.includes('para musica') || cmd.includes('detener música')) {
+            if (cmd.includes('para música') || cmd.includes('detener música')) {
                 bgMusic.pause();
                 speak("Música detenida.");
+                return true;
             }
-            else if (cmd.includes('cierra ventana') || cmd.includes('cierra la ventana')) {
+            if (cmd.includes('cierra ventana')) {
                 closeModal();
                 speak("Ventana cerrada.");
+                return true;
             }
-            else if (cmd.includes('descansa') || cmd.includes('atlas descansa')) {
+            if (cmd.includes('descansa')) {
                 document.body.classList.add('sleeping-mode');
                 reactor.classList.add('sleeping');
                 schoolLogoImg.style.filter = 'drop-shadow(0 0 8px rgba(0,229,255,0.8)) hue-rotate(140deg)';
@@ -871,16 +873,15 @@
                 try { if (recognition) recognition.stop(); } catch(e) {}
                 reactor.classList.remove('listening');
                 micBtn.innerText = 'ACTIVAR MIC';
-                speak("Entrando en suspensión.");
+                speak("Suspendido.");
+                return true;
             }
+            return false;
         }
 
         function manualToggleMusic() {
-            if (bgMusic.paused) {
-                bgMusic.play();
-            } else {
-                bgMusic.pause();
-            }
+            if (bgMusic.paused) bgMusic.play();
+            else bgMusic.pause();
         }
 
         const holoModal = document.getElementById('holoModal');
@@ -895,63 +896,60 @@
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto Irtra Scan Pass, abarcando la fundamentación teórica, análisis de viabilidad y los Objetivos de Desarrollo Sostenible vinculados.
+                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto Irtra Scan Pass.
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Aquí se encuentra la investigación completa y el marco teórico del proyecto Irtra Scan Pass, detallando la fundamentación y los ODS.");
+                speak("Abriendo investigación.");
             } 
             else if (type === 'circuito') {
                 holoTitle.innerText = '// 2. CIRCUITO (PRUEBA DIGITAL)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:12px;">
                         <div style="display:flex; gap:10px; margin-bottom:5px;">
-                            <button onclick="switchCircuitVideo('circuito')" class="music-btn" style="background:var(--cyan); color:#000; font-weight:bold;">[ PRUEBA DIGITAL: TINKERCAD ]</button>
-                            <button onclick="switchCircuitVideo('reto')" class="music-btn">[ CIRCUITO FÍSICO: RETO ]</button>
+                            <button onclick="switchCircuitVideo('circuito')" class="music-btn" style="background:var(--cyan); color:#000; font-weight:bold;">[ TINKERCAD ]</button>
+                            <button onclick="switchCircuitVideo('reto')" class="music-btn">[ RETO FÍSICO ]</button>
                         </div>
-                        <video id="circuitVideoElement" controls style="width:100%; max-height:50vh; border:1px solid currentColor; background:#000;">
+                        <video id="circuitVideoElement" controls autoplay style="width:100%; max-height:50vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/circuito.mp4" type="video/mp4">
-                            Tu navegador no soporta video.
                         </video>
-                        <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.</p>
+                        <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Prueba digital en Tinkercad.</p>
                     </div>`;
-                speak("Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.");
+                speak("Circuito digital.");
             }
             else if (type === 'reto') {
                 holoTitle.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:12px;">
                         <div style="display:flex; gap:10px; margin-bottom:5px;">
-                            <button onclick="switchCircuitVideo('circuito')" class="music-btn">[ PRUEBA DIGITAL: TINKERCAD ]</button>
-                            <button onclick="switchCircuitVideo('reto')" class="music-btn" style="background:var(--cyan); color:#000; font-weight:bold;">[ CIRCUITO FÍSICO: RETO ]</button>
+                            <button onclick="switchCircuitVideo('circuito')" class="music-btn">[ TINKERCAD ]</button>
+                            <button onclick="switchCircuitVideo('reto')" class="music-btn" style="background:var(--cyan); color:#000; font-weight:bold;">[ RETO FÍSICO ]</button>
                         </div>
-                        <video id="circuitVideoElement" controls style="width:100%; max-height:50vh; border:1px solid currentColor; background:#000;">
+                        <video id="circuitVideoElement" controls autoplay style="width:100%; max-height:50vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/reto.mp4" type="video/mp4">
-                            Tu navegador no soporta video.
                         </video>
-                        <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Este audiovisual muestra el circuito ya en físico funcionando.</p>
+                        <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Circuito en físico funcionando.</p>
                     </div>`;
-                speak("Este audiovisual muestra el circuito ya en físico funcionando.");
+                speak("Reto físico.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
                 holoBody.innerHTML = `
                     <div style="display:flex; justify-content:center; align-items:center; height:100%;">
-                        <img src="recursos/infografia.png" alt="Infografía Irtra Scan Pass" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
+                        <img src="recursos/infografia.png" alt="Infografía" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
                     </div>`;
-                speak("Visualización de la infografía oficial, resumiendo los puntos clave y métricas del proyecto de forma gráfica.");
+                speak("Infografía.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-                        <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
+                        <video controls autoplay style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/podcast.mp4" type="video/mp4">
-                            Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Podcast oficial sobre la arquitectura y visión de Irtra Scan Pass.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Podcast oficial.</p>
                     </div>`;
-                speak("Reproduciendo el podcast del equipo, donde se discuten los detalles técnicos y alcances del proyecto.");
+                speak("Podcast.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
@@ -959,25 +957,25 @@
                     <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:flex-start; gap:15px; padding-top: 10px;">
                         <div style="text-align:center;">
                             <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Colegio Capouilliez - Irtra Scan Pass</h4>
-                            <p style="font-size:0.75rem; color:#ff8888;">Equipo de desarrollo del proyecto.</p>
+                            <p style="font-size:0.75rem; color:#ff8888;">Equipo de desarrollo</p>
                         </div>
                         <div style="display:flex; justify-content:center; gap:20px; width:100%; flex-wrap:wrap; margin-top:10px;">
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/javier.png" alt="Javier Padilla" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
+                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:260px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
+                                <img src="recursos/javier.png" alt="Javier Padilla" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan);">
                                 <div>
                                     <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Javier Padilla</div>
-                                    <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Creador del circuito, web y de mi persona, Atlas</div>
+                                    <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Circuito, Web y Atlas</div>
                                 </div>
                             </div>
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/andrea.png" alt="Andrea Chet" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
+                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:260px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
+                                <img src="recursos/andrea.png" alt="Andrea Chet" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan);">
                                 <div>
                                     <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Andrea Chet</div>
                                     <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Investigación e Infografía</div>
                                 </div>
                             </div>
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/annie.png" alt="Annie Aguilar" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
+                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:260px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
+                                <img src="recursos/annie.png" alt="Annie Aguilar" style="width:120px; height:120px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan);">
                                 <div>
                                     <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Annie Aguilar</div>
                                     <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Documento y Podcast</div>
@@ -985,7 +983,7 @@
                             </div>
                         </div>
                     </div>`;
-                speak("Presentando al equipo de desarrollo: Javier Padilla, creador del circuito, web y de mi persona, Atlas; Andrea Chet, encargada de la investigación e infografía; y Annie Aguilar, responsable del documento y podcast.");
+                speak("Equipo de desarrollo.");
             }
         }
 
@@ -1006,25 +1004,25 @@
                 videoElem.src = 'recursos/circuito.mp4';
                 videoElem.load();
                 videoElem.play();
-                descElem.innerText = 'Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.';
+                descElem.innerText = 'Prueba digital en Tinkercad.';
                 if (buttons[0]) {
                     buttons[0].style.background = 'var(--cyan)';
                     buttons[0].style.color = '#000';
                     buttons[0].style.fontWeight = 'bold';
                 }
-                speak("Mostrando la prueba del circuito en digital con Tinkercad.");
+                speak("Cambiando a Tinkercad.");
             } else if (mode === 'reto') {
                 titleElem.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
                 videoElem.src = 'recursos/reto.mp4';
                 videoElem.load();
                 videoElem.play();
-                descElem.innerText = 'Este audiovisual muestra el circuito ya en físico funcionando.';
+                descElem.innerText = 'Circuito en físico funcionando.';
                 if (buttons[1]) {
                     buttons[1].style.background = 'var(--cyan)';
                     buttons[1].style.color = '#000';
                     buttons[1].style.fontWeight = 'bold';
                 }
-                speak("Mostrando el circuito en físico funcionando.");
+                speak("Cambiando a reto físico.");
             }
         }
 
