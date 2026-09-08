@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A.T.L.A.S. // AI Voice Command HUD</title>
+    <!-- Favicon para la pestaña del navegador -->
+    <link rel="icon" type="image/png" href="recursos/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #050000;
+            --cyan: #ff3333;
+            --cyan-glow: 0 0 15px rgba(255, 51, 51, 0.4);
+            --sleep-color: #00e5ff;
+            --sleep-glow: 0 0 15px rgba(0, 229, 255, 0.5);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100vh;
+            background-color: var(--bg);
+            color: var(--cyan);
+            font-family: 'JetBrains Mono', monospace;
+            overflow: hidden;
+            position: relative;
+            transition: color 0.5s ease;
+        }
+
+        body.sleeping-mode {
+            color: var(--sleep-color) !important;
+        }
+
+        #initOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5, 0, 0, 0.98);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        #initOverlay h2 {
+            font-size: 1.4rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px var(--cyan);
+            text-align: center;
+        }
+
+        #initOverlay p {
+            font-size: 0.8rem;
+            color: #ff8888;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .btn-init {
+            background: rgba(255, 51, 51, 0.15);
+            border: 2px solid var(--cyan);
+            color: #fff;
+            padding: 12px 25px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: bold;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: var(--cyan-glow);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-init:hover {
+            background: var(--cyan);
+            color: #000;
+            box-shadow: 0 0 25px var(--cyan);
+        }
+
+        .school-logo-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(15, 2, 2, 0.9);
+            border: 1px solid var(--cyan);
+            padding: 8px 12px;
+            border-radius: 4px;
+            box-shadow: var(--cyan-glow);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        body.sleeping-mode .school-logo-container {
+            border-color: var(--sleep-color);
+            box-shadow: var(--sleep-glow);
+        }
+
+        .school-logo-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .school-logo-container img {
+            height: 32px;
+            object-fit: contain;
+            transition: filter 0.5s ease;
+        }
+
+        .hud-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(40, 0, 0, 0.3) 0%, transparent 70%),
+                linear-gradient(90deg, rgba(255, 51, 51, 0.015) 1px, transparent 1px),
+                linear-gradient(rgba(255, 51, 51, 0.015) 1px, transparent 1px);
+            background-size: 100% 100%, 50px 50px, 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .tech-lines-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .hud-line {
+            stroke: rgba(255, 51, 51, 0.35);
+            stroke-width: 1.5;
+            stroke-dasharray: 4 2;
+            transition: stroke 0.5s ease;
+        }
+        body.sleeping-mode .hud-line {
+            stroke: rgba(0, 229, 255, 0.6);
+        }
+
+        .core-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+
+        .jarvis-reactor {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff3333 0%, #3f0000 60%, #050000 100%);
+            border: 3px solid var(--cyan);
+            box-shadow: 0 0 40px rgba(255, 51, 51, 0.4), inset 0 0 25px #ffffff;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: core-pulse 4s ease-in-out infinite;
+            cursor: pointer;
+            transition: all 0.5s ease;
+        }
+
+        .jarvis-reactor.listening {
+            border-color: #00ff66 !important;
+            box-shadow: 0 0 50px rgba(0, 255, 102, 0.6), inset 0 0 30px #ffffff !important;
+        }
+
+        .jarvis-reactor.sleeping {
+            border-color: var(--sleep-color) !important;
+            background: radial-gradient(circle, #00e5ff 0%, #002b3f 60%, #050000 100%) !important;
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.5), inset 0 0 25px #ffffff !important;
+            animation: none !important;
+        }
+
+        .jarvis-reactor::before {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            animation: spin-reverse 12s linear infinite;
+        }
+
+        .jarvis-reactor::after {
+            content: '';
+            position: absolute;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            border: 1px solid currentColor;
+            border-top: 3px solid transparent;
+            border-bottom: 3px solid transparent;
+            animation: spin 6s linear infinite;
+        }
+
+        .reactor-core-inner {
+            width: 45px;
+            height: 45px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #fff, 0 0 40px currentColor;
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-reverse { 100% { transform: rotate(-360deg); } }
+        @keyframes core-pulse {
+            0%, 100% { box-shadow: 0 0 25px rgba(255, 51, 51, 0.3), inset 0 0 15px #fff; }
+            50% { box-shadow: 0 0 50px rgba(255, 51, 51, 0.7), inset 0 0 25px #fff; }
+        }
+
+        .hud-node {
+            position: absolute;
+            background: rgba(15, 2, 2, 0.95);
+            border: 1px solid var(--cyan);
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            box-shadow: var(--cyan-glow);
+            cursor: pointer;
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transform: scale(0.5);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, border-color 0.5s ease;
+        }
+
+        body.sleeping-mode .hud-node {
+            border-color: var(--sleep-color);
+            box-shadow: var(--sleep-glow);
+        }
+
+        .hud-node.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .hud-node:hover {
+            background: rgba(255, 51, 51, 0.2);
+            transform: scale(1.05);
+        }
+        body.sleeping-mode .hud-node:hover {
+            background: rgba(0, 229, 255, 0.2);
+        }
+
+        .hud-node .node-title {
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 3px;
+        }
+
+        .hud-node .node-subtitle {
+            color: #ff8888;
+            font-size: 0.65rem;
+            transition: color 0.5s ease;
+        }
+        body.sleeping-mode .hud-node .node-subtitle {
+            color: #88eeff;
+        }
+
+        #node-investigacion { top: 28%; left: 10%; }
+        #node-circuito      { top: 58%; left: 10%; }
+        #node-infografia    { top: 28%; right: 10%; }
+        #node-podcast       { top: 58%; right: 10%; }
+        #node-quienes       { bottom: 8%; left: 50%; transform: translateX(-50%) scale(0.5); }
+        #node-quienes.visible { transform: translateX(-50%) scale(1); }
+        #node-quienes:hover { transform: translateX(-50%) scale(1.05); }
+
+        .commands-guide {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(15, 2, 2, 0.9);
+            border: 1px solid var(--cyan);
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 0.62rem;
+            box-shadow: var(--cyan-glow);
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            max-width: 260px;
+        }
+        body.sleeping-mode .commands-guide {
+            border-color: var(--sleep-color);
+            box-shadow: var(--sleep-glow);
+        }
+        .commands-guide.visible {
+            opacity: 1;
+        }
+        .commands-guide h4 {
+            color: #fff;
+            margin-bottom: 5px;
+            font-size: 0.68rem;
+            border-bottom: 1px solid currentColor;
+            padding-bottom: 2px;
+        }
+        .commands-guide ul {
+            list-style: none;
+            line-height: 1.35;
+        }
+        .commands-guide li span {
+            color: #fff;
+        }
+
+        .hud-header-status {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(15, 2, 2, 0.95);
+            border: 1px solid var(--cyan);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            box-shadow: var(--cyan-glow);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transition: all 0.5s ease;
+        }
+        body.sleeping-mode .hud-header-status {
+            border-color: var(--sleep-color);
+            box-shadow: var(--sleep-glow);
+        }
+        .hud-header-status.visible {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--cyan);
+            animation: blink 1s infinite;
+        }
+        .status-indicator.listening {
+            background: #00ff66 !important;
+            box-shadow: 0 0 10px #00ff66 !important;
+        }
+        .status-indicator.sleeping {
+            background: var(--sleep-color) !important;
+            box-shadow: 0 0 8px var(--sleep-color) !important;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .mic-toggle-btn {
+            background: none;
+            border: 1px solid currentColor;
+            color: inherit;
+            padding: 3px 8px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            border-radius: 3px;
+            font-family: inherit;
+        }
+        .mic-toggle-btn:hover {
+            background: currentColor;
+            color: #000;
+        }
+
+        .music-control-panel {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 2, 2, 0.9);
+            border: 1px solid var(--cyan);
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-size: 0.70rem;
+            box-shadow: var(--cyan-glow);
+            z-index: 10;
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        body.sleeping-mode .music-control-panel {
+            border-color: var(--sleep-color);
+            box-shadow: var(--sleep-glow);
+        }
+        .music-control-panel.visible {
+            opacity: 1;
+        }
+        .music-btn {
+            background: rgba(255, 51, 51, 0.2);
+            border: 1px solid currentColor;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            font-family: inherit;
+            border-radius: 3px;
+            transition: background 0.2s;
+        }
+        body.sleeping-mode .music-btn {
+            background: rgba(0, 229, 255, 0.2);
+        }
+        .music-btn:hover {
+            background: currentColor;
+            color: #000;
+        }
+
+        .holo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            pointer-events: none;
+            transition: background 0.4s ease, backdrop-filter 0.4s ease;
+        }
+
+        .holo-modal.active {
+            background: rgba(5, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            pointer-events: auto;
+        }
+
+        .holo-content-box {
+            width: 85%;
+            max-width: 1000px;
+            height: 80vh;
+            background: rgba(10, 2, 2, 0.98);
+            border: 2px solid var(--cyan);
+            border-radius: 6px;
+            box-shadow: 0 0 40px rgba(255, 51, 51, 0.4);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        body.sleeping-mode .holo-content-box {
+            border-color: var(--sleep-color);
+            box-shadow: 0 0 40px rgba(0, 229, 255, 0.4);
+        }
+        .holo-modal.active .holo-content-box {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .holo-header {
+            padding: 15px 20px;
+            background: rgba(255, 51, 51, 0.1);
+            border-bottom: 1px solid var(--cyan);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.5s ease;
+        }
+        body.sleeping-mode .holo-header {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: var(--sleep-color);
+        }
+        .holo-header h3 {
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .close-holo {
+            background: none;
+            border: 1px solid currentColor;
+            color: inherit;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.75rem;
+            border-radius: 3px;
+        }
+        .close-holo:hover {
+            background: currentColor;
+            color: #000;
+        }
+
+        .holo-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #ffbbbb;
+            transition: color 0.5s ease;
+        }
+        body.sleeping-mode .holo-body {
+            color: #bbffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="initOverlay">
+        <h2>PANTALLA DE BLOQUEO // A.T.L.A.S.</h2>
+        <p>Diga en voz alta: <span>"Atlas actívate"</span> para desbloquear el sistema</p>
+        <button class="btn-init" onclick="initSystem()">[ FORZAR DESBLOQUEO MANUAL ]</button>
+    </div>
+
+    <div class="school-logo-container" id="logoContainer">
+        <img id="schoolLogoImg" src="recursos/logocc.png" alt="Logo Capouilliez">
+    </div>
+
+    <div class="hud-header-status" id="headerStatus">
+        <div class="status-indicator" id="statusDot"></div>
+        <span id="statusText">A.T.L.A.S. // EN LÍNEA</span>
+        <button class="mic-toggle-btn" id="micBtn" onclick="toggleListening()">ACTIVAR MIC</button>
+    </div>
+
+    <div class="commands-guide" id="commandsGuide">
+        <h4>// COMANDOS DE VOZ</h4>
+        <ul>
+            <li>• <span>"Atlas abre documento"</span></li>
+            <li>• <span>"Atlas abre el circuito"</span></li>
+            <li>• <span>"Atlas pon el reto"</span></li>
+            <li>• <span>"Atlas abre infografía"</span></li>
+            <li>• <span>"Atlas abre el podcast"</span></li>
+            <li>• <span>"Atlas presenta el equipo"</span></li>
+            <li>• <span>"Atlas reproduce música"</span></li>
+            <li>• <span>"Atlas para música"</span></li>
+            <li>• <span>"Atlas cierra ventana"</span></li>
+            <li>• <span>"Atlas descansa"</span></li>
+            <li>• <span>"Atlas despierta"</span></li>
+        </ul>
+    </div>
+
+    <div class="music-control-panel" id="musicControlPanel">
+        <h4>// CONTROL DE MÚSICA</h4>
+        <button class="music-btn" onclick="manualToggleMusic()">[ PARAR / REPRODUCIR ]</button>
+    </div>
+
+    <div class="hud-canvas"></div>
+
+    <svg class="tech-lines-svg">
+        <line x1="220" y1="31%" x2="42%" y2="50%" class="hud-line" />
+        <line x1="220" y1="61%" x2="42%" y2="50%" class="hud-line" />
+        <line x1="calc(100% - 220px)" y1="31%" x2="58%" y2="50%" class="hud-line" />
+        <line x1="calc(100% - 220px)" y1="61%" x2="58%" y2="50%" class="hud-line" />
+        <line x1="50%" y1="calc(100% - 75px)" x2="50%" y2="65%" class="hud-line" />
+    </svg>
+
+    <div class="hud-node" id="node-investigacion" onclick="openModal('investigacion')">
+        <div class="node-title">// 1. INVESTIGACIÓN</div>
+        <div class="node-subtitle">DOCUMENTO Y MARCO TEÓRICO</div>
+    </div>
+
+    <div class="hud-node" id="node-circuito" onclick="openModal('circuito')">
+        <div class="node-title">// 2. CIRCUITO Y RETO</div>
+        <div class="node-subtitle">VIDEOS DE CIRCUITO Y RETO</div>
+    </div>
+
+    <div class="hud-node" id="node-infografia" onclick="openModal('infografia')">
+        <div class="node-title">// 3. INFOGRAFÍA</div>
+        <div class="node-subtitle">VISUALIZACIÓN DE DATOS</div>
+    </div>
+
+    <div class="hud-node" id="node-podcast" onclick="openModal('podcast')">
+        <div class="node-title">// 4. PODCAST</div>
+        <div class="node-subtitle">REPRODUCIR VIDEO MP4</div>
+    </div>
+
+    <div class="hud-node" id="node-quienes" onclick="openModal('quienes')">
+        <div class="node-title">// 5. QUIÉNES SOMOS</div>
+        <div class="node-subtitle">EQUIPO DE DESARROLLO</div>
+    </div>
+
+    <div class="core-system">
+        <div class="jarvis-reactor" id="reactor" onclick="toggleListening()" title="Clic para alternar escucha">
+            <div class="reactor-core-inner"></div>
+        </div>
+    </div>
+
+    <div class="holo-modal" id="holoModal">
+        <div class="holo-content-box">
+            <div class="holo-header">
+                <h3 id="holoTitle">// ARCHIVO SELECCIONADO</h3>
+                <button class="close-holo" onclick="closeModal()">[ CERRAR ]</button>
+            </div>
+            <div class="holo-body" id="holoBody"></div>
+        </div>
+    </div>
+
+    <audio id="bgMusic" preload="auto"></audio>
+
+    <script>
+        const MUSIC_PLAYLIST = [
+            "recursos/acdc1.mp3",
+            "recursos/acdc2.mp3"
+        ];
+        let currentTrackIndex = 0;
+        const bgMusic = document.getElementById('bgMusic');
+
+        function playNextTrack() {
+            bgMusic.src = MUSIC_PLAYLIST[currentTrackIndex];
+            bgMusic.volume = 0.15;
+            bgMusic.play().catch(e => console.log("Audio en espera: ", e));
+            currentTrackIndex = (currentTrackIndex + 1) % MUSIC_PLAYLIST.length;
+        }
+        bgMusic.addEventListener('ended', playNextTrack);
+
+        const initOverlay = document.getElementById('initOverlay');
+        const logoContainer = document.getElementById('logoContainer');
+        const schoolLogoImg = document.getElementById('schoolLogoImg');
+        const headerStatus = document.getElementById('headerStatus');
+        const commandsGuide = document.getElementById('commandsGuide');
+        const musicControlPanel = document.getElementById('musicControlPanel');
+        const nodes = document.querySelectorAll('.hud-node');
+        
+        let recognition = null;
+        let isListening = false;
+        let isSleeping = false;
+        let systemInitialized = false; 
+        let selectedVoice = null;
+        let lastProcessedCommand = "";
+        let lastCommandTimestamp = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initBackgroundListener();
+        });
+
+        function initBackgroundListener() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+            if (recognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const results = event.results;
+                const latestResult = results[results.length - 1];
+                if (!latestResult.isFinal) return;
+                
+                const transcript = latestResult[0].transcript.toLowerCase().trim();
+                
+                if (transcript.length > 1) {
+                    const now = Date.now();
+                    if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 3000)) {
+                        return;
+                    }
+                    lastProcessedCommand = transcript;
+                    lastCommandTimestamp = now;
+
+                    // SI ESTÁ EN PANTALLA DE BLOQUEO
+                    if (!systemInitialized) {
+                        if (transcript.includes('actívate') || transcript.includes('activate') || transcript.includes('atlas actívate')) {
+                            // Simulamos la interacción de audio del navegador ejecutando un play silencioso antes de iniciar todo
+                            bgMusic.play().then(() => {
+                                bgMusic.pause();
+                                initSystem();
+                            }).catch(() => {
+                                initSystem();
+                            });
+                        }
+                        return; 
+                    }
+
+                    if (systemInitialized) {
+                        processVoiceCommand(transcript);
+                    }
+                }
+            };
+
+            recognition.onerror = (event) => {
+                if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
+                    setTimeout(() => {
+                        try { recognition.start(); } catch(e) {}
+                    }, 300);
+                }
+            };
+
+            recognition.onend = () => {
+                try { recognition.start(); } catch(e) {}
+            };
+
+            try { recognition.start(); } catch(e) {}
+        }
+
+        function initSystem() {
+            if (systemInitialized) return;
+            systemInitialized = true; 
+
+            // Desbloqueo forzado de la síntesis de voz con un utterance vacío obligatorio
+            if ('speechSynthesis' in window) {
+                const dummyUtter = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.speak(dummyUtter);
+            }
+
+            playNextTrack();
+
+            initOverlay.style.opacity = '0';
+            setTimeout(() => {
+                initOverlay.style.display = 'none';
+                logoContainer.classList.add('visible');
+                headerStatus.classList.add('visible');
+                commandsGuide.classList.add('visible');
+                musicControlPanel.classList.add('visible');
+                nodes.forEach((node, index) => {
+                    setTimeout(() => node.classList.add('visible'), index * 80);
+                });
+                
+                setTimeout(() => {
+                    speak("Bienvenido. Yo soy Atlas, tu asistente personal y presentador del proyecto Irtra Scan Pass. Todos los subsistemas están listos.");
+                }, 400);
+            }, 400);
+
+            isListening = true;
+            reactor.classList.add('listening');
+            statusDot.className = 'status-indicator listening';
+            statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
+            micBtn.innerText = 'APAGAR MIC';
+        }
+
+        function loadVoices() {
+            if (!('speechSynthesis' in window)) return;
+            const voices = window.speechSynthesis.getVoices();
+            selectedVoice = voices.find(v => v.lang.startsWith('es') && (v.name.includes('Google') || v.name.includes('Pablo') || v.name.includes('Raul') || v.name.includes('Jorge') || v.name.includes('Microsoft'))) || voices.find(v => v.lang.startsWith('es')) || voices[0];
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = loadVoices;
+            loadVoices();
+        }
+
+        function speak(text, callback) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                if (selectedVoice) utterance.voice = selectedVoice;
+                utterance.lang = 'es-ES';
+                utterance.rate = 1.15; 
+                utterance.pitch = 0.85; 
+                
+                if (callback) {
+                    utterance.onend = callback;
+                }
+                window.speechSynthesis.speak(utterance);
+            } else if (callback) {
+                callback();
+            }
+        }
+
+        const reactor = document.getElementById('reactor');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const micBtn = document.getElementById('micBtn');
+
+        function toggleListening() {
+            if (!systemInitialized) {
+                initSystem();
+                return;
+            }
+
+            isListening = !isListening;
+            if (isListening) {
+                try { recognition.start(); } catch(e) {}
+                reactor.classList.add('listening');
+                statusDot.className = 'status-indicator listening';
+                statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
+                micBtn.innerText = 'APAGAR MIC';
+            } else {
+                try { recognition.stop(); } catch(e) {}
+                reactor.classList.remove('listening');
+                statusDot.className = 'status-indicator';
+                statusText.innerText = 'A.T.L.A.S. // EN LÍNEA';
+                micBtn.innerText = 'ACTIVAR MIC';
+            }
+        }
+
+        function processVoiceCommand(cmd) {
+            if (cmd.includes('despierta') || cmd.includes('atlas despierta')) {
+                if (isSleeping) {
+                    document.body.classList.remove('sleeping-mode');
+                    reactor.classList.remove('sleeping');
+                    schoolLogoImg.style.filter = 'none';
+                    isSleeping = false;
+                }
+                if (!isListening) {
+                    isListening = true;
+                    try { recognition.start(); } catch(e) {}
+                }
+                reactor.classList.add('listening');
+                statusDot.className = 'status-indicator listening';
+                statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
+                micBtn.innerText = 'APAGAR MIC';
+                speak("Sistemas reactivados y escuchando.");
+                return;
+            }
+
+            if (isSleeping) return;
+
+            if (cmd.includes('abre documento') || cmd.includes('investigación') || cmd.includes('investigacion')) { 
+                openModal('investigacion'); 
+            }
+            else if (cmd.includes('abre el circuito') || cmd.includes('abre circuito')) { 
+                openModal('circuito'); 
+            }
+            else if (cmd.includes('pon el reto') || cmd.includes('abre reto')) { 
+                openModal('reto'); 
+            }
+            else if (cmd.includes('abre infografía') || cmd.includes('infografia') || cmd.includes('infografía')) { 
+                openModal('infografia'); 
+            }
+            else if (cmd.includes('abre el podcast') || cmd.includes('podcast')) { 
+                openModal('podcast'); 
+            }
+            else if (cmd.includes('presenta el equipo') || cmd.includes('quienes somos') || cmd.includes('quiénes somos') || cmd.includes('presenta al equipo')) { 
+                openModal('quienes'); 
+            }
+            else if (cmd.includes('reproduce música') || cmd.includes('reproducir música')) {
+                bgMusic.play();
+                speak("Reproduciendo música.");
+            }
+            else if (cmd.includes('para música') || cmd.includes('para musica') || cmd.includes('detener música')) {
+                bgMusic.pause();
+                speak("Música detenida.");
+            }
+            else if (cmd.includes('cierra ventana') || cmd.includes('cierra la ventana')) {
+                closeModal();
+                speak("Ventana cerrada.");
+            }
+            else if (cmd.includes('descansa') || cmd.includes('atlas descansa')) {
+                document.body.classList.add('sleeping-mode');
+                reactor.classList.add('sleeping');
+                schoolLogoImg.style.filter = 'drop-shadow(0 0 8px rgba(0,229,255,0.8)) hue-rotate(140deg)';
+                statusDot.className = 'status-indicator sleeping';
+                statusText.innerText = 'A.T.L.A.S. // MODO REPOSO';
+                isSleeping = true;
+                reactor.classList.remove('listening');
+                micBtn.innerText = 'ACTIVAR MIC';
+                speak("Entrando en suspensión.");
+            }
+        }
+
+        function manualToggleMusic() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+            } else {
+                bgMusic.pause();
+            }
+        }
+
+        const holoModal = document.getElementById('holoModal');
+        const holoTitle = document.getElementById('holoTitle');
+        const holoBody = document.getElementById('holoBody');
+
+        function openModal(type) {
+            holoModal.classList.add('active');
+            
+            if (type === 'investigacion') {
+                holoTitle.innerText = '// 1. INVESTIGACIÓN';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
+                        <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
+                            <strong>Investigación y ODS:</strong> En este documento se presenta la recolección de datos y el marco teórico que fundamenta el proyecto, conectando de manera directa sus objetivos con las metas de desarrollo sostenible ODS.
+                        </p>
+                        <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
+                    </div>`;
+                speak("Abriendo la investigación del proyecto Irtra Scan Pass. Aquí se detalla la recolección de datos realizada y cómo se vincula directamente con los objetivos de desarrollo sostenible.");
+            } 
+            else if (type === 'circuito') {
+                holoTitle.innerText = '// 2. CIRCUITO Y RETO';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%;">
+                        <video controls style="width:100%; max-height:48vh; border:1px solid currentColor; background:#000;">
+                            <source src="recursos/circuito.mp4" type="video/mp4">
+                            Tu navegador no soporta video.
+                        </video>
+                        <p style="margin-top: 8px; font-size: 0.78rem; text-align:center;">
+                            <strong>Prueba de Circuito Digital:</strong> Audiovisual que demuestra la simulación y validación lógica del circuito realizada digitalmente a través de la plataforma Tinkercad.
+                        </p>
+                        <p style="margin-top: 4px; font-size: 0.7rem; opacity:0.8;">[ Di "Atlas pon el reto" para cambiar al video del circuito físico ]</p>
+                    </div>`;
+                speak("Cargando la simulación digital del circuito para Irtra Scan Pass, desarrollada y probada en la plataforma Tinkercad para verificar su funcionamiento lógico.");
+            } 
+            else if (type === 'reto') {
+                holoTitle.innerText = '// 2. CIRCUITO Y RETO';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%;">
+                        <video controls style="width:100%; max-height:48vh; border:1px solid currentColor; background:#000;">
+                            <source src="recursos/reto.mp4" type="video/mp4">
+                            Tu navegador no soporta video.
+                        </video>
+                        <p style="margin-top: 8px; font-size: 0.78rem; text-align:center;">
+                            <strong>Reto en Físico:</strong> Audiovisual que muestra la implementación real del hardware, con el circuito completamente armado y operando en el entorno físico.
+                        </p>
+                        <p style="margin-top: 4px; font-size: 0.7rem; opacity:0.8;">[ Di "Atlas abre el circuito" para volver al video de Tinkercad ]</p>
+                    </div>`;
+                speak("Mostrando el reto en físico de Irtra Scan Pass, donde se aprecia el circuito ensamblado y operando de manera real.");
+            } 
+            else if (type === 'infografia') {
+                holoTitle.innerText = '// 3. INFOGRAFÍA';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; height:100%; gap:10px;">
+                        <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; text-align:left; width:100%;">
+                            <strong>Infografía Gráfica:</strong> Esquema visual detallado que expone de forma clara los aspectos más sobresalientes, especificaciones y detalles clave de todo el proyecto.
+                        </p>
+                        <div style="text-align:center; flex:1; display:flex; align-items:center; justify-content:center; width:100%;">
+                            <img src="recursos/tu-infografia.png" alt="Infografía" style="max-width:100%; max-height:55vh; border:1px solid currentColor; object-fit: contain;">
+                        </div>
+                    </div>`;
+                speak("Presentando la infografía gráfica de Irtra Scan Pass, donde se resumen y profundizan los detalles técnicos del proyecto.");
+            } 
+            else if (type === 'podcast') {
+                holoTitle.innerText = '// 4. PODCAST (VIDEO MP4)';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:10px;">
+                        <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; text-align:left; width:100%;">
+                            <strong>Podcast Técnico:</strong> Audiovisual explicativo sobre el proceso de elaboración de Irtra Scan Pass y un análisis detallado de las conclusiones finales obtenidas.
+                        </p>
+                        <div style="display:flex; justify-content:center; align-items:center; flex:1; width:100%;">
+                            <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
+                                <source src="recursos/tu-podcast.mp4" type="video/mp4">
+                                Tu navegador no soporta video.
+                            </video>
+                        </div>
+                    </div>`;
+                speak("Reproduciendo el podcast de Irtra Scan Pass, un espacio audiovisual que detalla el paso a paso de nuestra elaboración y las conclusiones del proyecto.");
+            } 
+            else if (type === 'quienes') {
+                holoTitle.innerText = '// 5. QUIÉNES SOMOS';
+                holoBody.innerHTML = `
+                    <div style="text-align:center; padding:10px; height:100%; display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                            <h3 style="color:#fff; font-size:1.1rem; margin-bottom:5px;">Colegio Capouilliez - Irtra Scan Pass</h3>
+                            <p style="font-size:0.75rem; margin-bottom:15px; opacity:0.9;">Proyecto desarrollado de manera integral por Javier Padilla, Andrea Chet y Annie Aguilar.</p>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; width: 100%; max-width: 800px; margin: 0 auto; overflow-y: auto; max-height: 50vh; padding: 5px;">
+                            
+                            <div style="background: rgba(255,51,51,0.05); border: 1px solid currentColor; padding: 12px; border-radius: 6px; text-align: center;">
+                                <img src="recursos/javo.png" alt="Javier Padilla" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid currentColor; margin-bottom: 8px;">
+                                <h4 style="color: #fff; font-size: 0.85rem; margin-bottom: 4px;">Javier Padilla</h4>
+                                <p style="font-size: 0.65rem; opacity: 0.8;">Creador del circuito, web y de mi persona, Atlas</p>
+                            </div>
+
+                            <div style="background: rgba(255,51,51,0.05); border: 1px solid currentColor; padding: 12px; border-radius: 6px; text-align: center;">
+                                <img src="recursos/chet.png" alt="Andrea Chet" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid currentColor; margin-bottom: 8px;">
+                                <h4 style="color: #fff; font-size: 0.85rem; margin-bottom: 4px;">Andrea Chet</h4>
+                                <p style="font-size: 0.65rem; opacity: 0.8;">Investigación e Infografía</p>
+                            </div>
+
+                            <div style="background: rgba(255,51,51,0.05); border: 1px solid currentColor; padding: 12px; border-radius: 6px; text-align: center;">
+                                <img src="recursos/annie.png" alt="Annie Aguilar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 1px solid currentColor; margin-bottom: 8px;">
+                                <h4 style="color: #fff; font-size: 0.85rem; margin-bottom: 4px;">Annie Aguilar</h4>
+                                <p style="font-size: 0.65rem; opacity: 0.8;">Documento y Podcast</p>
+                            </div>
+
+                        </div>
+                    </div>`;
+                speak("Irtra Scan Pass fue elaborado con dedicación por Javier Padilla, quien diseñó el circuito, la web y mi programación como Atlas; Andrea Chet, encargada de la investigación y la infografía; y Annie Aguilar, responsable del documento y el podcast.");
+            }
+        }
+
+        function closeModal() {
+            const videoEls = holoBody.querySelectorAll('video');
+            videoEls.forEach(v => v.pause());
+            holoModal.classList.remove('active');
+            setTimeout(() => { holoBody.innerHTML = ''; }, 300);
+        }
+    </script>
+</body>
+</html>
