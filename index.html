@@ -687,7 +687,7 @@
                 });
                 
                 setTimeout(() => {
-                    speak("Bienvenido al sistema. A.T.L.A.S. en línea y listo para operar.");
+                    speak("Bienvenido señor. Todos los sistemas están en línea. A.T.L.A.S. listo para operar.");
                 }, 300);
             }, 300);
 
@@ -924,7 +924,7 @@
                         </video>
                         <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Prueba digital en Tinkercad.</p>
                     </div>`;
-                speak("Abriendo circuito y simulación digital en Tinkercad. Puede alternar al reto físico utilizando los botones superiores.");
+                speak("Abriendo el circuito en Tinkercad. Esta simulación digital muestra el funcionamiento lógico y las conexiones iniciales del sistema antes del ensamblaje físico.");
             }
             else if (type === 'reto') {
                 holoTitle.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
@@ -939,7 +939,7 @@
                         </video>
                         <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Circuito en físico funcionando.</p>
                     </div>`;
-                speak("Abriendo el reto físico. Aquí se muestra el funcionamiento real del circuito implementado.");
+                speak("Abriendo el reto físico. Aquí se presenta el circuito implementado en la realidad, validando el rendimiento de los componentes y su interacción directa.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
@@ -947,7 +947,7 @@
                     <div style="display:flex; justify-content:center; align-items:center; height:100%;">
                         <img src="recursos/infografia.png" alt="Infografía" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
                     </div>`;
-                speak("Abriendo la infografía del proyecto. Presenta un resumen visual estructurado de todo el proceso.");
+                speak("Abriendo la infografía. Este esquema visual sintetiza de forma clara los puntos clave, la arquitectura y los objetivos del proyecto.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
@@ -958,7 +958,7 @@
                         </video>
                         <p style="text-align:center; font-size:0.8rem;">Podcast oficial.</p>
                     </div>`;
-                speak("Abriendo el podcast oficial. Reproduciendo el archivo de audio y video explicativo.");
+                speak("Abriendo el podcast oficial. Reproduciendo el contenido multimedia con la discusión y explicación detallada del proyecto.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
@@ -992,7 +992,7 @@
                             </div>
                         </div>
                     </div>`;
-                speak("Abriendo la sección quiénes somos. Conozca al equipo de desarrollo del Colegio Capouilliez para el proyecto Irtra Scan Pass, conformado por Javier Padilla, desarrolador de la pagina web, circuito y de mi interfaz, Andrea Chet, investigadora y creadora de la infografia, y Annie Aguilar, creadora del documento y editora del podcast .");
+                speak("Abriendo la sección quiénes somos. Conozca al equipo de desarrollo del Colegio Capouilliez para el proyecto Irtra Scan Pass, conformado por Javier Padilla, Andrea Chet y Annie Aguilar.");
             }
         }
 
@@ -1019,7 +1019,7 @@
                     buttons[0].style.color = '#000';
                     buttons[0].style.fontWeight = 'bold';
                 }
-                speak("Cambiando a la simulación digital en Tinkercad.");
+                speak("Cambiando al circuito en Tinkercad. Esta simulación digital muestra el diseño lógico y las conexiones previas del circuito.");
             } else if (mode === 'reto') {
                 titleElem.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
                 videoElem.src = 'recursos/reto.mp4';
@@ -1031,7 +1031,7 @@
                     buttons[1].style.color = '#000';
                     buttons[1].style.fontWeight = 'bold';
                 }
-                speak("Cambiando al circuito en físico funcionando.");
+                speak("Cambiando al reto físico. Mostrando la implementación real del circuito operando con los componentes electrónicos.");
             }
         }
 
