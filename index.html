@@ -535,8 +535,8 @@
 
     <div id="initOverlay">
         <h2>PANTALLA DE BLOQUEO // A.T.L.A.S.</h2>
-        <p>Diga en voz alta: <span>"Atlas actívate"</span> para desbloquear el sistema</p>
-        <button class="btn-init" onclick="initSystem()">[ FORZAR DESBLOQUEO MANUAL ]</button>
+        <p>Haga clic para inicializar los subsistemas de audio y voz</p>
+        <button class="btn-init" onclick="initSystem()">[ INICIALIZAR SISTEMA ]</button>
     </div>
 
     <div class="school-logo-container" id="logoContainer">
@@ -656,75 +656,11 @@
         let lastProcessedCommand = "";
         let lastCommandTimestamp = 0;
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initBackgroundListener();
-        });
-
-        function initBackgroundListener() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return;
-            if (recognition) return;
-
-            recognition = new SpeechRecognition();
-            recognition.continuous = true;
-            recognition.lang = 'es-ES';
-            recognition.interimResults = false;
-
-            recognition.onresult = (event) => {
-                const results = event.results;
-                const latestResult = results[results.length - 1];
-                if (!latestResult.isFinal) return;
-                
-                const transcript = latestResult[0].transcript.toLowerCase().trim();
-                
-                if (transcript.length > 1) {
-                    const now = Date.now();
-                    if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 3000)) {
-                        return;
-                    }
-                    lastProcessedCommand = transcript;
-                    lastCommandTimestamp = now;
-
-                    // SI ESTÁ EN PANTALLA DE BLOQUEO
-                    if (!systemInitialized) {
-                        if (transcript.includes('actívate') || transcript.includes('activate') || transcript.includes('atlas actívate')) {
-                            // Simulamos la interacción de audio del navegador ejecutando un play silencioso antes de iniciar todo
-                            bgMusic.play().then(() => {
-                                bgMusic.pause();
-                                initSystem();
-                            }).catch(() => {
-                                initSystem();
-                            });
-                        }
-                        return; 
-                    }
-
-                    if (systemInitialized) {
-                        processVoiceCommand(transcript);
-                    }
-                }
-            };
-
-            recognition.onerror = (event) => {
-                if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
-                    setTimeout(() => {
-                        try { recognition.start(); } catch(e) {}
-                    }, 300);
-                }
-            };
-
-            recognition.onend = () => {
-                try { recognition.start(); } catch(e) {}
-            };
-
-            try { recognition.start(); } catch(e) {}
-        }
-
         function initSystem() {
             if (systemInitialized) return;
             systemInitialized = true; 
 
-            // Desbloqueo forzado de la síntesis de voz con un utterance vacío obligatorio
+            // Desbloqueo de síntesis de voz con utterance fantasma
             if ('speechSynthesis' in window) {
                 const dummyUtter = new SpeechSynthesisUtterance("");
                 window.speechSynthesis.speak(dummyUtter);
@@ -753,6 +689,52 @@
             statusDot.className = 'status-indicator listening';
             statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
             micBtn.innerText = 'APAGAR MIC';
+
+            initBackgroundListener();
+        }
+
+        function initBackgroundListener() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) return;
+            if (recognition) return;
+
+            recognition = new SpeechRecognition();
+            recognition.continuous = true;
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+
+            recognition.onresult = (event) => {
+                const results = event.results;
+                const latestResult = results[results.length - 1];
+                if (!latestResult.isFinal) return;
+                
+                const transcript = latestResult[0].transcript.toLowerCase().trim();
+                
+                if (transcript.length > 1 && systemInitialized) {
+                    const now = Date.now();
+                    if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 3000)) {
+                        return;
+                    }
+                    lastProcessedCommand = transcript;
+                    lastCommandTimestamp = now;
+
+                    processVoiceCommand(transcript);
+                }
+            };
+
+            recognition.onerror = (event) => {
+                if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
+                    setTimeout(() => {
+                        try { recognition.start(); } catch(e) {}
+                    }, 300);
+                }
+            };
+
+            recognition.onend = () => {
+                try { recognition.start(); } catch(e) {}
+            };
+
+            try { recognition.start(); } catch(e) {}
         }
 
         function loadVoices() {
@@ -790,10 +772,7 @@
         const micBtn = document.getElementById('micBtn');
 
         function toggleListening() {
-            if (!systemInitialized) {
-                initSystem();
-                return;
-            }
+            if (!systemInitialized) return;
 
             isListening = !isListening;
             if (isListening) {
