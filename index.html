@@ -874,35 +874,35 @@
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Investigación y ODS:</strong> En este documento se presenta la recolección de datos y el marco teórico que fundamenta el proyecto, conectando de manera directa sus objetivos con las metas de desarrollo sostenible ODS.
+                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto Irtra Scan Pass, abarcando la fundamentación teórica, análisis de viabilidad y los Objetivos de Desarrollo Sostenible vinculados.
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Abriendo la investigación del proyecto Irtra Scan Pass. Aquí se detalla la recolección de datos realizada y cómo se vincula directamente con los objetivos de desarrollo sostenible.");
+                speak("Aquí se encuentra la investigación completa y el marco teórico del proyecto Irtra Scan Pass, detallando la fundamentación y los ODS.");
             } 
             else if (type === 'circuito') {
-                holoTitle.innerText = '// 2. CIRCUITO Y RETO';
+                holoTitle.innerText = '// 2. CIRCUITO';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/circuito.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Demostración del circuito de pruebas y validación del sistema Irtra Scan Pass.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Demostración del funcionamiento práctico del circuito de operaciones.</p>
                     </div>`;
-                speak("Mostrando el video del circuito de operaciones.");
+                speak("Este es el circuito operativo del sistema, donde se comprueba el flujo del proceso automatizado.");
             }
             else if (type === 'reto') {
-                holoTitle.innerText = '// 2. RETO TÉCNICO';
+                holoTitle.innerText = '// 2. RETO';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/reto.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Ejecución y superación del reto técnico planteado para el proyecto.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Ejecución y superación del reto técnico planteado.</p>
                     </div>`;
-                speak("Reproduciendo el video del reto técnico.");
+                speak("En este apartado se muestra el reto técnico superado durante el desarrollo e implementación del proyecto.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
@@ -910,7 +910,7 @@
                     <div style="display:flex; justify-content:center; align-items:center; height:100%;">
                         <img src="recursos/infografia.png" alt="Infografía Irtra Scan Pass" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
                     </div>`;
-                speak("Desplegando la infografía del proyecto.");
+                speak("Visualización de la infografía oficial, resumiendo los puntos clave y métricas del proyecto de forma gráfica.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
@@ -920,9 +920,9 @@
                             <source src="recursos/podcast.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Podcast oficial sobre el desarrollo, arquitectura y objetivos de Irtra Scan Pass.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Podcast oficial sobre la arquitectura y visión de Irtra Scan Pass.</p>
                     </div>`;
-                speak("Reproduciendo el podcast del equipo.");
+                speak("Reproduciendo el podcast del equipo, donde se discuten los detalles técnicos y alcances del proyecto.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
@@ -930,7 +930,7 @@
                     <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:flex-start; gap:15px; padding-top: 10px;">
                         <div style="text-align:center;">
                             <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Colegio Capouilliez - Irtra Scan Pass</h4>
-                            <p style="font-size:0.75rem; color:#ff8888;">Proyecto desarrollado de manera integral por Javier Padilla, Andrea Chet y Annie Aguilar.</p>
+                            <p style="font-size:0.75rem; color:#ff8888;">Equipo de desarrollo del proyecto.</p>
                         </div>
                         <div style="display:flex; justify-content:center; gap:20px; width:100%; flex-wrap:wrap; margin-top:10px;">
                             <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
