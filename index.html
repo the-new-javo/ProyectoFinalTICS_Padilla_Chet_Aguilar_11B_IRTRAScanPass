@@ -283,13 +283,12 @@
             color: #88eeff;
         }
 
-        #node-investigacion { top: 28%; left: 10%; }
-        #node-circuito     { top: 58%; left: 10%; }
-        #node-infografia    { top: 28%; right: 10%; }
-        #node-podcast       { top: 58%; right: 10%; }
-        #node-quienes       { bottom: 8%; left: 50%; transform: translateX(-50%) scale(0.5); }
-        #node-quienes.visible { transform: translateX(-50%) scale(1); }
-        #node-quienes:hover { transform: translateX(-50%) scale(1.05); }
+        #node-investigacion { top: 22%; left: 10%; }
+        #node-circuito     { top: 42%; left: 10%; }
+        #node-reto         { top: 62%; left: 10%; }
+        #node-infografia    { top: 22%; right: 10%; }
+        #node-podcast       { top: 42%; right: 10%; }
+        #node-quienes       { top: 62%; right: 10%; }
 
         .commands-guide {
             position: absolute;
@@ -574,11 +573,12 @@
     <div class="hud-canvas"></div>
 
     <svg class="tech-lines-svg">
-        <line x1="220" y1="31%" x2="42%" y2="50%" class="hud-line" />
-        <line x1="220" y1="61%" x2="42%" y2="50%" class="hud-line" />
-        <line x1="calc(100% - 220px)" y1="31%" x2="58%" y2="50%" class="hud-line" />
-        <line x1="calc(100% - 220px)" y1="61%" x2="58%" y2="50%" class="hud-line" />
-        <line x1="50%" y1="calc(100% - 75px)" x2="50%" y2="65%" class="hud-line" />
+        <line x1="220" y1="25%" x2="42%" y2="50%" class="hud-line" />
+        <line x1="220" y1="45%" x2="42%" y2="50%" class="hud-line" />
+        <line x1="220" y1="65%" x2="42%" y2="50%" class="hud-line" />
+        <line x1="calc(100% - 220px)" y1="25%" x2="58%" y2="50%" class="hud-line" />
+        <line x1="calc(100% - 220px)" y1="45%" x2="58%" y2="50%" class="hud-line" />
+        <line x1="calc(100% - 220px)" y1="65%" x2="58%" y2="50%" class="hud-line" />
     </svg>
 
     <div class="hud-node" id="node-investigacion" onclick="openModal('investigacion')">
@@ -591,7 +591,7 @@
         <div class="node-subtitle">PRUEBA DIGITAL (TINKERCAD)</div>
     </div>
 
-    <div class="hud-node" id="node-reto" onclick="openModal('reto')" style="top: 73%; left: 10%;">
+    <div class="hud-node" id="node-reto" onclick="openModal('reto')">
         <div class="node-title">// 2. RETO</div>
         <div class="node-subtitle">CIRCUITO FÍSICO FUNCIONANDO</div>
     </div>
@@ -731,7 +731,6 @@
 
             recognition.onerror = (event) => {
                 console.warn("Error de reconocimiento de voz: ", event.error);
-                // Si ocurre un error de red o falta de voz, intentamos reiniciar tras un leve respiro
                 if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
                     setTimeout(() => {
                         if (isListening && !isSleeping) {
@@ -742,7 +741,6 @@
             };
 
             recognition.onend = () => {
-                // Auto-reiniciar el reconocimiento para mantener el modo escucha activo de forma continua
                 if (isListening && !isSleeping) {
                     try { recognition.start(); } catch(e) {}
                 }
@@ -958,14 +956,14 @@
                         </div>
                         <div style="display:flex; justify-content:center; gap:20px; width:100%; flex-wrap:wrap; margin-top:10px;">
                             <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/javo.png" alt="Javier Padilla" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
+                                <img src="recursos/javier.png" alt="Javier Padilla" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
                                 <div>
                                     <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Javier Padilla</div>
                                     <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Creador del circuito, web y de mi persona, Atlas</div>
                                 </div>
                             </div>
                             <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/chet.png" alt="Andrea Chet" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
+                                <img src="recursos/andrea.png" alt="Andrea Chet" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
                                 <div>
                                     <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Andrea Chet</div>
                                     <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Investigación e Infografía</div>
