@@ -642,7 +642,7 @@
         function playNextTrack() {
             bgMusic.src = MUSIC_PLAYLIST[currentTrackIndex];
             bgMusic.volume = 0.15;
-            bgMusic.play().catch(e => console.log("Audio en espera: ", e));
+            bgMusic.play().catch(e => console.log("Audio en espera por política del navegador: ", e));
             currentTrackIndex = (currentTrackIndex + 1) % MUSIC_PLAYLIST.length;
         }
         bgMusic.addEventListener('ended', playNextTrack);
@@ -667,11 +667,14 @@
             if (systemInitialized) return;
             systemInitialized = true; 
 
+            // Desbloqueo forzado de la síntesis de voz en el clic inicial
             if ('speechSynthesis' in window) {
-                const dummyUtter = new SpeechSynthesisUtterance("");
+                window.speechSynthesis.cancel();
+                const dummyUtter = new SpeechSynthesisUtterance(" ");
                 window.speechSynthesis.speak(dummyUtter);
             }
 
+            // Inicializar la música de fondo directamente dentro del gesto de usuario
             playNextTrack();
 
             initOverlay.style.opacity = '0';
@@ -685,9 +688,10 @@
                     setTimeout(() => node.classList.add('visible'), index * 50);
                 });
                 
+                // Dar un breve respiro para que el sintetizador emita la bienvenida con total seguridad
                 setTimeout(() => {
                     speak("Sistemas listos.");
-                }, 200);
+                }, 300);
             }, 300);
 
             isListening = true;
@@ -702,19 +706,23 @@
         function initBackgroundListener() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) return;
-            if (recognition) return;
+            
+            // Destruir instancia anterior si existía para evitar bloqueos por permisos colgados
+            if (recognition) {
+                try { recognition.abort(); } catch(e) {}
+                recognition = null;
+            }
 
             recognition = new SpeechRecognition();
             recognition.continuous = true;
             recognition.lang = 'es-ES';
-            recognition.interimResults = true; // Permite capturar resultados intermedios para mayor velocidad
+            recognition.interimResults = true;
 
             recognition.onresult = (event) => {
                 const results = event.results;
                 const latestResult = results[results.length - 1];
                 const transcript = latestResult[0].transcript.toLowerCase().trim();
                 
-                // Procesar comandos de forma rápida incluso en resultados intermedios si coinciden con palabras clave
                 if (transcript.length > 2 && systemInitialized) {
                     const now = Date.now();
                     if (transcript === lastProcessedCommand && (now - lastCommandTimestamp < 1500)) {
@@ -729,22 +737,31 @@
             };
 
             recognition.onerror = (event) => {
+                console.log("Error de reconocimiento de voz: ", event.error);
+                // Si el error es por no-speech o abrt, reiniciamos limpiamente para mantener el micrófono activo
                 if (isListening && !isSleeping) {
                     setTimeout(() => {
-                        try { recognition.start(); } catch(e) {}
-                    }, 200);
+                        try {
+                            recognition.stop();
+                            recognition.start();
+                        } catch(e) {}
+                    }, 300);
                 }
             };
 
             recognition.onend = () => {
                 if (isListening && !isSleeping) {
-                    try { recognition.start(); } catch(e) {}
+                    try {
+                        recognition.start();
+                    } catch(e) {}
                 }
             };
 
             try {
                 recognition.start();
-            } catch(e) {}
+            } catch(e) {
+                console.log("No se pudo iniciar automáticamente el reconocimiento:", e);
+            }
         }
 
         function loadVoices() {
@@ -764,7 +781,7 @@
                 const utterance = new SpeechSynthesisUtterance(text);
                 if (selectedVoice) utterance.voice = selectedVoice;
                 utterance.lang = 'es-ES';
-                utterance.rate = 1.15; // Velocidad de voz optimizada y más rápida
+                utterance.rate = 1.15;
                 utterance.pitch = 1.0; 
                 
                 if (callback) utterance.onend = callback;
@@ -784,10 +801,7 @@
 
             isListening = !isListening;
             if (isListening) {
-                try { 
-                    if (recognition) recognition.start(); 
-                    else initBackgroundListener();
-                } catch(e) {}
+                initBackgroundListener();
                 reactor.classList.add('listening');
                 statusDot.className = 'status-indicator listening';
                 statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
@@ -811,7 +825,7 @@
                 }
                 if (!isListening) {
                     isListening = true;
-                    try { if (recognition) recognition.start(); } catch(e) {}
+                    initBackgroundListener();
                 }
                 reactor.classList.add('listening');
                 statusDot.className = 'status-indicator listening';
