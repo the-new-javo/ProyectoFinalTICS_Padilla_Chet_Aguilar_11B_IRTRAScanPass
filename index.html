@@ -587,8 +587,13 @@
     </div>
 
     <div class="hud-node" id="node-circuito" onclick="openModal('circuito')">
-        <div class="node-title">// 2. CIRCUITO Y RETO</div>
-        <div class="node-subtitle">VIDEOS DE CIRCUITO Y RETO</div>
+        <div class="node-title">// 2. CIRCUITO</div>
+        <div class="node-subtitle">PRUEBA DIGITAL (TINKERCAD)</div>
+    </div>
+
+    <div class="hud-node" id="node-reto" onclick="openModal('reto')" style="top: 73%; left: 10%;">
+        <div class="node-title">// 2. RETO</div>
+        <div class="node-subtitle">CIRCUITO FÍSICO FUNCIONANDO</div>
     </div>
 
     <div class="hud-node" id="node-infografia" onclick="openModal('infografia')">
@@ -694,7 +699,10 @@
 
         function initBackgroundListener() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) return;
+            if (!SpeechRecognition) {
+                console.warn("SpeechRecognition no soportado en este navegador.");
+                return;
+            }
             if (recognition) return;
 
             recognition = new SpeechRecognition();
@@ -722,18 +730,29 @@
             };
 
             recognition.onerror = (event) => {
+                console.warn("Error de reconocimiento de voz: ", event.error);
+                // Si ocurre un error de red o falta de voz, intentamos reiniciar tras un leve respiro
                 if (event.error === 'no-speech' || event.error === 'network' || event.error === 'aborted') {
                     setTimeout(() => {
-                        try { recognition.start(); } catch(e) {}
-                    }, 300);
+                        if (isListening && !isSleeping) {
+                            try { recognition.start(); } catch(e) {}
+                        }
+                    }, 500);
                 }
             };
 
             recognition.onend = () => {
-                try { recognition.start(); } catch(e) {}
+                // Auto-reiniciar el reconocimiento para mantener el modo escucha activo de forma continua
+                if (isListening && !isSleeping) {
+                    try { recognition.start(); } catch(e) {}
+                }
             };
 
-            try { recognition.start(); } catch(e) {}
+            try {
+                recognition.start();
+            } catch(e) {
+                console.error("No se pudo iniciar el reconocimiento de voz inicial:", e);
+            }
         }
 
         function loadVoices() {
@@ -775,13 +794,16 @@
 
             isListening = !isListening;
             if (isListening) {
-                try { recognition.start(); } catch(e) {}
+                try { 
+                    if (recognition) recognition.start(); 
+                    else initBackgroundListener();
+                } catch(e) {}
                 reactor.classList.add('listening');
                 statusDot.className = 'status-indicator listening';
                 statusText.innerText = 'A.T.L.A.S. // ESCUCHANDO...';
                 micBtn.innerText = 'APAGAR MIC';
             } else {
-                try { recognition.stop(); } catch(e) {}
+                try { if (recognition) recognition.stop(); } catch(e) {}
                 reactor.classList.remove('listening');
                 statusDot.className = 'status-indicator';
                 statusText.innerText = 'A.T.L.A.S. // EN LÍNEA';
@@ -799,7 +821,7 @@
                 }
                 if (!isListening) {
                     isListening = true;
-                    try { recognition.start(); } catch(e) {}
+                    try { if (recognition) recognition.start(); } catch(e) {}
                 }
                 reactor.classList.add('listening');
                 statusDot.className = 'status-indicator listening';
@@ -848,6 +870,8 @@
                 statusDot.className = 'status-indicator sleeping';
                 statusText.innerText = 'A.T.L.A.S. // MODO REPOSO';
                 isSleeping = true;
+                isListening = false;
+                try { if (recognition) recognition.stop(); } catch(e) {}
                 reactor.classList.remove('listening');
                 micBtn.innerText = 'ACTIVAR MIC';
                 speak("Entrando en suspensión.");
@@ -881,7 +905,7 @@
                 speak("Aquí se encuentra la investigación completa y el marco teórico del proyecto Irtra Scan Pass, detallando la fundamentación y los ODS.");
             } 
             else if (type === 'circuito') {
-                holoTitle.innerText = '// 2. CIRCUITO';
+                holoTitle.innerText = '// 2. CIRCUITO (TINKERCAD)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
@@ -893,7 +917,7 @@
                 speak("Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.");
             }
             else if (type === 'reto') {
-                holoTitle.innerText = '// 2. RETO';
+                holoTitle.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
