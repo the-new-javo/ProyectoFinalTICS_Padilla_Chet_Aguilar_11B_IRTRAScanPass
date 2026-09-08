@@ -667,14 +667,12 @@
             if (systemInitialized) return;
             systemInitialized = true; 
 
-            // Desbloqueo forzado de la síntesis de voz en el clic inicial
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
                 const dummyUtter = new SpeechSynthesisUtterance(" ");
                 window.speechSynthesis.speak(dummyUtter);
             }
 
-            // Inicializar la música de fondo directamente dentro del gesto de usuario
             playNextTrack();
 
             initOverlay.style.opacity = '0';
@@ -688,9 +686,8 @@
                     setTimeout(() => node.classList.add('visible'), index * 50);
                 });
                 
-                // Dar un breve respiro para que el sintetizador emita la bienvenida con total seguridad
                 setTimeout(() => {
-                    speak("Sistemas listos.");
+                    speak("Bienvenido al sistema. A.T.L.A.S. en línea y listo para operar.");
                 }, 300);
             }, 300);
 
@@ -707,7 +704,6 @@
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) return;
             
-            // Destruir instancia anterior si existía para evitar bloqueos por permisos colgados
             if (recognition) {
                 try { recognition.abort(); } catch(e) {}
                 recognition = null;
@@ -738,7 +734,6 @@
 
             recognition.onerror = (event) => {
                 console.log("Error de reconocimiento de voz: ", event.error);
-                // Si el error es por no-speech o abrt, reiniciamos limpiamente para mantener el micrófono activo
                 if (isListening && !isSleeping) {
                     setTimeout(() => {
                         try {
@@ -914,7 +909,7 @@
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Abriendo investigación.");
+                speak("Abriendo la sección de investigación. Aquí se encuentra la documentación detallada y el marco teórico completo del proyecto.");
             } 
             else if (type === 'circuito') {
                 holoTitle.innerText = '// 2. CIRCUITO (PRUEBA DIGITAL)';
@@ -929,7 +924,7 @@
                         </video>
                         <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Prueba digital en Tinkercad.</p>
                     </div>`;
-                speak("Circuito digital.");
+                speak("Abriendo circuito y simulación digital en Tinkercad. Puede alternar al reto físico utilizando los botones superiores.");
             }
             else if (type === 'reto') {
                 holoTitle.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
@@ -944,7 +939,7 @@
                         </video>
                         <p id="circuitDescText" style="text-align:center; font-size:0.8rem;">Circuito en físico funcionando.</p>
                     </div>`;
-                speak("Reto físico.");
+                speak("Abriendo el reto físico. Aquí se muestra el funcionamiento real del circuito implementado.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
@@ -952,7 +947,7 @@
                     <div style="display:flex; justify-content:center; align-items:center; height:100%;">
                         <img src="recursos/infografia.png" alt="Infografía" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
                     </div>`;
-                speak("Infografía.");
+                speak("Abriendo la infografía del proyecto. Presenta un resumen visual estructurado de todo el proceso.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
@@ -963,7 +958,7 @@
                         </video>
                         <p style="text-align:center; font-size:0.8rem;">Podcast oficial.</p>
                     </div>`;
-                speak("Podcast.");
+                speak("Abriendo el podcast oficial. Reproduciendo el archivo de audio y video explicativo.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
@@ -997,7 +992,7 @@
                             </div>
                         </div>
                     </div>`;
-                speak("Equipo de desarrollo.");
+                speak("Abriendo la sección quiénes somos. Conozca al equipo de desarrollo del Colegio Capouilliez para el proyecto Irtra Scan Pass, conformado por Javier Padilla, desarrolador de la pagina web, circuito y de mi interfaz, Andrea Chet, investigadora y creadora de la infografia, y Annie Aguilar, creadora del documento y editora del podcast .");
             }
         }
 
@@ -1024,7 +1019,7 @@
                     buttons[0].style.color = '#000';
                     buttons[0].style.fontWeight = 'bold';
                 }
-                speak("Cambiando a Tinkercad.");
+                speak("Cambiando a la simulación digital en Tinkercad.");
             } else if (mode === 'reto') {
                 titleElem.innerText = '// 2. RETO (CIRCUITO FÍSICO)';
                 videoElem.src = 'recursos/reto.mp4';
@@ -1036,7 +1031,7 @@
                     buttons[1].style.color = '#000';
                     buttons[1].style.fontWeight = 'bold';
                 }
-                speak("Cambiando a reto físico.");
+                speak("Cambiando al circuito en físico funcionando.");
             }
         }
 
