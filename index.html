@@ -553,6 +553,7 @@
         <h4>// COMANDOS DE VOZ</h4>
         <ul>
             <li>• <span>"Atlas abre documento"</span></li>
+            <li>• <span>"Atlas pon el word"</span></li>
             <li>• <span>"Atlas abre el circuito"</span></li>
             <li>• <span>"Atlas pon el reto"</span></li>
             <li>• <span>"Atlas abre infografía"</span></li>
@@ -811,7 +812,10 @@
 
             if (isSleeping) return;
 
-            if (cmd.includes('abre documento') || cmd.includes('investigación') || cmd.includes('investigacion')) { 
+            if (cmd.includes('pon el word') || cmd.includes('abre word') || cmd.includes('documento word')) { 
+                openModal('word'); 
+            }
+            else if (cmd.includes('abre documento') || cmd.includes('investigación') || cmd.includes('investigacion')) { 
                 openModal('investigacion'); 
             }
             else if (cmd.includes('abre el circuito') || cmd.includes('abre circuito')) { 
@@ -870,16 +874,28 @@
             holoModal.classList.add('active');
             
             if (type === 'investigacion') {
-                holoTitle.innerText = '// 1. INVESTIGACIÓN';
+                holoTitle.innerText = '// 1. INVESTIGACIÓN (PDF)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto Irtra Scan Pass, abarcando la fundamentación teórica, análisis de viabilidad y los Objetivos de Desarrollo Sostenible vinculados.
+                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto en formato PDF.
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Aquí se encuentra la investigación completa y el marco teórico del proyecto Irtra Scan Pass, detallando la fundamentación y los ODS.");
+                speak("Aquí se encuentra la investigación en formato PDF.");
             } 
+            else if (type === 'word') {
+                holoTitle.innerText = '// 1. INVESTIGACIÓN (WORD)';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
+                        <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
+                            <strong>Documento Word:</strong> Visualización del documento editable de investigación en la página.
+                        </p>
+                        <!-- Usando visor web office integrado para mostrar el word directamente -->
+                        <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=TU_ENLACE_AL_ARCHIVO_WORD" style="width:100%; flex:1; border:none; background:#000;"></iframe>
+                    </div>`;
+                speak("Abriendo el documento de Word en la interfaz.");
+            }
             else if (type === 'circuito') {
                 holoTitle.innerText = '// 2. CIRCUITO';
                 holoBody.innerHTML = `
@@ -888,9 +904,9 @@
                             <source src="recursos/circuito.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Visualización del funcionamiento y montaje del circuito electrónico.</p>
                     </div>`;
-                speak("Este audiovisual muestra la prueba del circuito en digital en la plataforma de Tinkercad.");
+                speak("Mostrando el vídeo correspondiente al circuito del proyecto.");
             }
             else if (type === 'reto') {
                 holoTitle.innerText = '// 2. RETO';
@@ -900,17 +916,17 @@
                             <source src="recursos/reto.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Este audiovisual muestra el circuito ya en físico funcionando.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Demostración de la solución técnica aplicada al reto.</p>
                     </div>`;
-                speak("Este audiovisual muestra el circuito ya en físico funcionando.");
+                speak("Mostrando la demostración del reto superado.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
                 holoBody.innerHTML = `
-                    <div style="display:flex; justify-content:center; align-items:center; height:100%;">
-                        <img src="recursos/infografia.png" alt="Infografía Irtra Scan Pass" style="max-width:100%; max-height:100%; object-fit:contain; border:1px solid currentColor;">
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
+                        <img src="recursos/infografia.png" alt="Infografía del Proyecto" style="max-width:100%; max-height:70vh; object-fit:contain; border:1px solid currentColor;">
                     </div>`;
-                speak("Visualización de la infografía oficial, resumiendo los puntos clave y métricas del proyecto de forma gráfica.");
+                speak("Visualizando la infografía interactiva del proyecto.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
@@ -920,49 +936,30 @@
                             <source src="recursos/podcast.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Podcast oficial sobre la arquitectura y visión de Irtra Scan Pass.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Reproduciendo episodio del podcast oficial del equipo.</p>
                     </div>`;
-                speak("Reproduciendo el podcast del equipo, donde se discuten los detalles técnicos y alcances del proyecto.");
+                speak("Iniciando reproducción del podcast del equipo.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
                 holoBody.innerHTML = `
-                    <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:flex-start; gap:15px; padding-top: 10px;">
-                        <div style="text-align:center;">
-                            <h4 style="color:#fff; font-size:0.95rem; margin-bottom:4px;">Colegio Capouilliez - Irtra Scan Pass</h4>
-                            <p style="font-size:0.75rem; color:#ff8888;">Equipo de desarrollo del proyecto.</p>
-                        </div>
-                        <div style="display:flex; justify-content:center; gap:20px; width:100%; flex-wrap:wrap; margin-top:10px;">
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/javo.png" alt="Javier Padilla" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
-                                <div>
-                                    <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Javier Padilla</div>
-                                    <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Creador del circuito, web y de mi persona, Atlas</div>
-                                </div>
-                            </div>
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/chet.png" alt="Andrea Chet" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
-                                <div>
-                                    <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Andrea Chet</div>
-                                    <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Investigación e Infografía</div>
-                                </div>
-                            </div>
-                            <div style="background:rgba(255,51,51,0.08); border:1px solid var(--cyan); border-radius:6px; padding:15px; width:280px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:10px;">
-                                <img src="recursos/annie.png" alt="Annie Aguilar" style="width:150px; height:150px; border-radius:50%; object-fit:cover; border:2px solid var(--cyan); box-shadow:0 0 10px rgba(255,51,51,0.5);">
-                                <div>
-                                    <div style="color:#fff; font-weight:bold; font-size:0.85rem;">Annie Aguilar</div>
-                                    <div style="font-size:0.68rem; color:#ff8888; margin-top:4px;">Documento y Podcast</div>
-                                </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; height:100%; gap:15px; text-align:center;">
+                        <p style="font-size:0.9rem; max-width:80%; line-height:1.6;">
+                            Conoce al equipo de desarrollo responsable de idear, programar y estructurar la plataforma <strong>Irtra Scan Pass</strong>.
+                        </p>
+                        <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
+                            <div style="border:1px solid currentColor; padding:15px; border-radius:4px; width:200px; background:rgba(255,255,255,0.03);">
+                                <h4 style="color:#fff; margin-bottom:5px;">Javier Padilla</h4>
+                                <p style="font-size:0.75rem;">Desarrollador Principal & Sistemas IA</p>
                             </div>
                         </div>
                     </div>`;
-                speak("Presentando al equipo de desarrollo: Javier Padilla, creador del circuito, web y de mi persona, Atlas; Andrea Chet, encargada de la investigación e infografía; y Annie Aguilar, responsable del documento y podcast.");
+                speak("Presentando al equipo de desarrollo de este proyecto.");
             }
         }
 
         function closeModal() {
             holoModal.classList.remove('active');
-            holoBody.innerHTML = '';
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
             }
