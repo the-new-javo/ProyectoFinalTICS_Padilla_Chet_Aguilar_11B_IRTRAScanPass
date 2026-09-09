@@ -552,8 +552,8 @@
     <div class="commands-guide" id="commandsGuide">
         <h4>// COMANDOS DE VOZ</h4>
         <ul>
+            <li>• <span>"Atlas abre la investigación"</span></li>
             <li>• <span>"Atlas abre documento"</span></li>
-            <li>• <span>"Atlas pon el word"</span></li>
             <li>• <span>"Atlas abre el circuito"</span></li>
             <li>• <span>"Atlas pon el reto"</span></li>
             <li>• <span>"Atlas abre infografía"</span></li>
@@ -812,10 +812,10 @@
 
             if (isSleeping) return;
 
-            if (cmd.includes('pon el word') || cmd.includes('abre word') || cmd.includes('documento word')) { 
+            if (cmd.includes('abre documento')) { 
                 openModal('word'); 
             }
-            else if (cmd.includes('abre documento') || cmd.includes('investigación') || cmd.includes('investigacion')) { 
+            else if (cmd.includes('abre la investigación') || cmd.includes('abre investigacion')) { 
                 openModal('investigacion'); 
             }
             else if (cmd.includes('abre el circuito') || cmd.includes('abre circuito')) { 
@@ -882,7 +882,7 @@
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Aquí se encuentra la investigación en formato PDF.");
+                speak("Abriendo la investigación en formato PDF.");
             } 
             else if (type === 'word') {
                 holoTitle.innerText = '// 1. INVESTIGACIÓN (WORD)';
@@ -891,10 +891,9 @@
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
                             <strong>Documento Word:</strong> Visualización del documento editable de investigación en la página.
                         </p>
-                        <!-- Usando visor web office integrado para mostrar el word directamente -->
                         <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=TU_ENLACE_AL_ARCHIVO_WORD" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Abriendo el documento de Word en la interfaz.");
+                speak("Abriendo el documento Word en la interfaz.");
             }
             else if (type === 'circuito') {
                 holoTitle.innerText = '// 2. CIRCUITO';
