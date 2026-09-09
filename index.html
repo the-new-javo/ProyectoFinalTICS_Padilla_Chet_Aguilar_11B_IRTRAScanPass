@@ -419,16 +419,22 @@
         .music-control-panel.visible {
             opacity: 1;
         }
+        .music-btn-group {
+            display: flex;
+            gap: 5px;
+        }
         .music-btn {
             background: rgba(255, 51, 51, 0.2);
             border: 1px solid currentColor;
             color: #fff;
-            padding: 5px 10px;
+            padding: 5px 8px;
             font-size: 0.65rem;
             cursor: pointer;
             font-family: inherit;
             border-radius: 3px;
             transition: background 0.2s;
+            flex: 1;
+            text-align: center;
         }
         body.sleeping-mode .music-btn {
             background: rgba(0, 229, 255, 0.2);
@@ -569,7 +575,11 @@
 
     <div class="music-control-panel" id="musicControlPanel">
         <h4>// CONTROL DE MÚSICA</h4>
-        <button class="music-btn" onclick="manualToggleMusic()">[ PARAR / REPRODUCIR ]</button>
+        <button class="music-btn" style="width:100%;" onclick="manualToggleMusic()">[ PARAR / REPRODUCIR ]</button>
+        <div class="music-btn-group">
+            <button class="music-btn" onclick="changeVolume(-0.1)">[ VOL - ]</button>
+            <button class="music-btn" onclick="changeVolume(0.1)">[ VOL + ]</button>
+        </div>
     </div>
 
     <div class="hud-canvas"></div>
@@ -640,6 +650,13 @@
             currentTrackIndex = (currentTrackIndex + 1) % MUSIC_PLAYLIST.length;
         }
         bgMusic.addEventListener('ended', playNextTrack);
+
+        function changeVolume(amount) {
+            let newVol = bgMusic.volume + amount;
+            if (newVol > 1.0) newVol = 1.0;
+            if (newVol < 0.0) newVol = 0.0;
+            bgMusic.volume = newVol;
+        }
 
         const initOverlay = document.getElementById('initOverlay');
         const logoContainer = document.getElementById('logoContainer');
@@ -899,10 +916,11 @@
                 holoTitle.innerText = '// 2. CIRCUITO (TINKERCAD)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-                        <div style="width:100%; height:55vh; border:1px solid currentColor; background:#000; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
-                            <p style="font-size:0.9rem;">[ Visualización del circuito digital interactivo diseñado en la plataforma de Tinkercad ]</p>
-                        </div>
-                        <p style="text-align:center; font-size:0.8rem;">Aquí encontramos el circuito realizado digital en la plataforma de Tinkercad, mostrando la simulación electrónica previa al montaje.</p>
+                        <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
+                            <source src="recursos/circuito.mp4" type="video/mp4">
+                            Tu navegador no soporta video.
+                        </video>
+                        <p style="text-align:center; font-size:0.8rem;">Aquí encontramos el circuito realizado digital en la plataforma de Tinkercad.</p>
                     </div>`;
                 speak("Aquí encontramos el circuito realizado de manera digital en la plataforma de Tinkercad.");
             }
@@ -947,16 +965,25 @@
                             Conoce al equipo de desarrollo responsable de idear, programar y estructurar este proyecto.
                         </p>
                         <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:5px; width:100%;">
-                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
-                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Javier Padilla</h4>
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03); display:flex; flex-direction:column; align-items:center; gap:8px;">
+                                <div style="width:70px; height:70px; border-radius:50%; border:1px solid currentColor; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center;">
+                                    <img src="recursos/javier.jpg" alt="Javier Padilla" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <h4 style="color:#fff; margin-bottom:2px; font-size:0.85rem;">Javier Padilla</h4>
                                 <p style="font-size:0.7rem; color:#ffaaaa;">Creó la página web, el circuito y la interfaz de Atlas.</p>
                             </div>
-                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
-                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Andrea Chett</h4>
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03); display:flex; flex-direction:column; align-items:center; gap:8px;">
+                                <div style="width:70px; height:70px; border-radius:50%; border:1px solid currentColor; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center;">
+                                    <img src="recursos/andrea.jpg" alt="Andrea Chett" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <h4 style="color:#fff; margin-bottom:2px; font-size:0.85rem;">Andrea Chett</h4>
                                 <p style="font-size:0.7rem; color:#ffaaaa;">Realizó la investigación y la infografía del proyecto.</p>
                             </div>
-                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
-                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Annie Aguilar</h4>
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03); display:flex; flex-direction:column; align-items:center; gap:8px;">
+                                <div style="width:70px; height:70px; border-radius:50%; border:1px solid currentColor; overflow:hidden; background:#000; display:flex; align-items:center; justify-content:center;">
+                                    <img src="recursos/annie.jpg" alt="Annie Aguilar" style="width:100%; height:100%; object-fit:cover;">
+                                </div>
+                                <h4 style="color:#fff; margin-bottom:2px; font-size:0.85rem;">Annie Aguilar</h4>
                                 <p style="font-size:0.7rem; color:#ffaaaa;">Elaboró el documento en Word y el podcast.</p>
                             </div>
                         </div>
