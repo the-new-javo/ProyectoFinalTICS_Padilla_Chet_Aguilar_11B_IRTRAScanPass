@@ -584,22 +584,22 @@
 
     <div class="hud-node" id="node-investigacion" onclick="openModal('investigacion')">
         <div class="node-title">// 1. INVESTIGACIÓN</div>
-        <div class="node-subtitle">DOCUMENTO Y MARCO TEÓRICO</div>
+        <div class="node-subtitle">MARCO TEÓRICO Y ODS (PDF)</div>
     </div>
 
     <div class="hud-node" id="node-circuito" onclick="openModal('circuito')">
         <div class="node-title">// 2. CIRCUITO Y RETO</div>
-        <div class="node-subtitle">VIDEOS DE CIRCUITO Y RETO</div>
+        <div class="node-subtitle">TINKERCAD Y MONTAJE FÍSICO</div>
     </div>
 
     <div class="hud-node" id="node-infografia" onclick="openModal('infografia')">
         <div class="node-title">// 3. INFOGRAFÍA</div>
-        <div class="node-subtitle">VISUALIZACIÓN DE DATOS</div>
+        <div class="node-subtitle">SÍNTESIS GRÁFICA</div>
     </div>
 
     <div class="hud-node" id="node-podcast" onclick="openModal('podcast')">
         <div class="node-title">// 4. PODCAST</div>
-        <div class="node-subtitle">REPRODUCIR VIDEO MP4</div>
+        <div class="node-subtitle">AUDIOVISUAL OFICIAL</div>
     </div>
 
     <div class="hud-node" id="node-quienes" onclick="openModal('quienes')">
@@ -878,54 +878,54 @@
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Investigación y Marco Teórico:</strong> Documentación detallada del proyecto en formato PDF.
+                            <strong>Investigación y Marco Teórico:</strong> Aquí se encuentra la investigación que incluye el marco teórico, los subtemas desarrollados y la relación directa que tiene el proyecto con los Objetivos de Desarrollo Sostenible (ODS) en formato PDF.
                         </p>
                         <iframe src="recursos/tu-investigacion.pdf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Abriendo la investigación en formato PDF.");
+                speak("Aquí se encuentra la investigación, el marco teórico, subtemas y la relación con los ODS en un archivo de PDF.");
             } 
             else if (type === 'word') {
                 holoTitle.innerText = '// 1. INVESTIGACIÓN (WORD)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
                         <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Documento Word:</strong> Visualización del documento editable de investigación en la página.
+                            <strong>Documento Word:</strong> Documento complementario con la planificación interna y los borradores editables del proyecto.
                         </p>
                         <iframe src="https://view.officeapps.live.com/op/embed.aspx?src=TU_ENLACE_AL_ARCHIVO_WORD" style="width:100%; flex:1; border:none; background:#000;"></iframe>
                     </div>`;
-                speak("Abriendo el documento Word en la interfaz.");
+                speak("Abriendo el documento Word con la información complementaria de edición interna.");
             }
             else if (type === 'circuito') {
-                holoTitle.innerText = '// 2. CIRCUITO';
+                holoTitle.innerText = '// 2. CIRCUITO (TINKERCAD)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-                        <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
-                            <source src="recursos/circuito.mp4" type="video/mp4">
-                            Tu navegador no soporta video.
-                        </video>
-                        <p style="text-align:center; font-size:0.8rem;">Visualización del funcionamiento y montaje del circuito electrónico.</p>
+                        <div style="width:100%; height:55vh; border:1px solid currentColor; background:#000; display:flex; align-items:center; justify-content:center; text-align:center; padding:20px;">
+                            <p style="font-size:0.9rem;">[ Visualización del circuito digital interactivo diseñado en la plataforma de Tinkercad ]</p>
+                        </div>
+                        <p style="text-align:center; font-size:0.8rem;">Aquí encontramos el circuito realizado digital en la plataforma de Tinkercad, mostrando la simulación electrónica previa al montaje.</p>
                     </div>`;
-                speak("Mostrando el vídeo correspondiente al circuito del proyecto.");
+                speak("Aquí encontramos el circuito realizado de manera digital en la plataforma de Tinkercad.");
             }
             else if (type === 'reto') {
-                holoTitle.innerText = '// 2. RETO';
+                holoTitle.innerText = '// 2. RETO (FÍSICO)';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
                             <source src="recursos/reto.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Demostración de la solución técnica aplicada al reto.</p>
+                        <p style="text-align:center; font-size:0.8rem;">En el reto, aquí encontrarán el audiovisual donde verán el circuito ya en físico funcionando en el entorno real.</p>
                     </div>`;
-                speak("Mostrando la demostración del reto superado.");
+                speak("En el reto, aquí encontrarán el audiovisual donde verán el circuito ya en físico.");
             }
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <img src="recursos/infografia.png" alt="Infografía del Proyecto" style="max-width:100%; max-height:70vh; object-fit:contain; border:1px solid currentColor;">
+                        <p style="text-align:center; font-size:0.8rem;">Infografía síntesis que resume visualmente los puntos clave y beneficios del proyecto.</p>
                     </div>`;
-                speak("Visualizando la infografía interactiva del proyecto.");
+                speak("Visualizando la infografía interactiva de síntesis visual del proyecto.");
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
@@ -935,25 +935,33 @@
                             <source src="recursos/podcast.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
-                        <p style="text-align:center; font-size:0.8rem;">Reproduciendo episodio del podcast oficial del equipo.</p>
+                        <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
                     </div>`;
-                speak("Iniciando reproducción del podcast del equipo.");
+                speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
             }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
                 holoBody.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; height:100%; gap:15px; text-align:center;">
-                        <p style="font-size:0.9rem; max-width:80%; line-height:1.6;">
-                            Conoce al equipo de desarrollo responsable de idear, programar y estructurar la plataforma <strong>Irtra Scan Pass</strong>.
+                    <div style="display:flex; flex-direction:column; align-items:center; height:100%; gap:15px; text-align:center; overflow-y:auto; padding:10px;">
+                        <p style="font-size:0.85rem; max-width:85%; line-height:1.6;">
+                            Conoce al equipo de desarrollo responsable de idear, programar y estructurar este proyecto.
                         </p>
-                        <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap; margin-top:10px;">
-                            <div style="border:1px solid currentColor; padding:15px; border-radius:4px; width:200px; background:rgba(255,255,255,0.03);">
-                                <h4 style="color:#fff; margin-bottom:5px;">Javier Padilla</h4>
-                                <p style="font-size:0.75rem;">Desarrollador Principal & Sistemas IA</p>
+                        <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:5px; width:100%;">
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
+                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Javier Padilla</h4>
+                                <p style="font-size:0.7rem; color:#ffaaaa;">Creó la página web, el circuito y la interfaz de Atlas.</p>
+                            </div>
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
+                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Andrea Chett</h4>
+                                <p style="font-size:0.7rem; color:#ffaaaa;">Realizó la investigación y la infografía del proyecto.</p>
+                            </div>
+                            <div style="border:1px solid currentColor; padding:12px; border-radius:4px; width:220px; background:rgba(255,255,255,0.03);">
+                                <h4 style="color:#fff; margin-bottom:5px; font-size:0.85rem;">Annie Aguilar</h4>
+                                <p style="font-size:0.7rem; color:#ffaaaa;">Elaboró el documento en Word y el podcast.</p>
                             </div>
                         </div>
                     </div>`;
-                speak("Presentando al equipo de desarrollo de este proyecto.");
+                speak("Presentando al equipo de desarrollo: Javier Padilla creó la web, el circuito y la interfaz de Atlas; Andrea Chett hizo la investigación y la infografía; y Annie Aguilar hizo el documento y el podcast.");
             }
         }
 
