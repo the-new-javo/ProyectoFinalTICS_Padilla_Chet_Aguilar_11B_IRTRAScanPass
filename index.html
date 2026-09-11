@@ -679,8 +679,12 @@
             systemInitialized = true; 
 
             if ('speechSynthesis' in window) {
-                const dummyUtter = new SpeechSynthesisUtterance("");
-                window.speechSynthesis.speak(dummyUtter);
+                try {
+                    const dummyUtter = new SpeechSynthesisUtterance("");
+                    window.speechSynthesis.speak(dummyUtter);
+                } catch (e) {
+                    console.warn("Speech synthesis init warning:", e);
+                }
             }
 
             playNextTrack();
@@ -942,27 +946,23 @@
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px; width:100%;">
                         <object data="recursos/info.pdf" type="application/pdf" style="width:100%; height:70vh; border:1px solid currentColor;">
                             <embed src="recursos/info.pdf" type="application/pdf" style="width:100%; height:70vh;" />
-                            <p style="text-align:center; font-size:0.9rem;">Tu navegador no soporta la visualización de PDFs. Puedes descargarlo <a href="recursos/infografia.pdf" target="_blank" style="color:inherit; text-decoration:underline;">aquí</a>.</p>
+                            <p style="text-align:center; font-size:0.9rem;">Tu navegador no soporta la visualización de PDFs. Puedes descargarlo <a href="recursos/info.pdf" target="_blank" style="color:inherit; text-decoration:underline;">aquí</a>.</p>
                         </object>
                         <p style="text-align:center; font-size:0.8rem;">Infografía síntesis que resume visualmente los puntos clave y beneficios del proyecto.</p>
                     </div>`;
                 speak("Visualizando el documento PDF de la infografía del proyecto.");
             }
             else if (type === 'podcast') {
-    holoTitle.innerText = '// 4. PODCAST';
-    holoBody.innerHTML = `
-        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-            <div style="position:relative; width:100%; height:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
-                <iframe src="https://www.youtube.com/watch?v=kZ6oALqOe9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; position:absolute; top:0; left:0;"></iframe>
-            </div>
-            <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
-        </div>`;
-    
-    speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
-}
-
-    speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
-}
+                holoTitle.innerText = '// 4. PODCAST';
+                holoBody.innerHTML = `
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
+                        <div style="position:relative; width:100%; height:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
+                            <iframe src="https://www.youtube.com/embed/kZ6oALqOe9k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="width:100%; height:100%; position:absolute; top:0; left:0;"></iframe>
+                        </div>
+                        <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
+                    </div>`;
+                speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
+            }
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
                 holoBody.innerHTML = `
