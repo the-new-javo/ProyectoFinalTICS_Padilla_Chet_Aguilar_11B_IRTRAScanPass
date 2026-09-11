@@ -949,17 +949,24 @@
                 speak("Visualizando el documento PDF de la infografía del proyecto.");
             }
             else if (type === 'podcast') {
-                holoTitle.innerText = '// 4. PODCAST';
-                holoBody.innerHTML = `
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-                        <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
-                            <source src="recursos/pc.mp4" type="video/mp4">
-                            Tu navegador no soporta video.
-                        </video>
-                        <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
-                    </div>`;
-                speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
-            }
+    holoTitle.innerText = '// 4. PODCAST';
+    holoBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
+            <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
+                <source src="recursos/pc.mp4" type="video/mp4">
+                Tu navegador no soporta video.
+            </video>
+            <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
+        </div>`;
+    
+    // Forzar la carga del video tras insertarlo en el DOM
+    const videoElement = holoBody.querySelector('video');
+    if (videoElement) {
+        videoElement.load();
+    }
+
+    speak("Reproduciendo el episodio del podcast oficial con la explicación del equipo.");
+}
             else if (type === 'quienes') {
                 holoTitle.innerText = '// 5. QUIÉNES SOMOS';
                 holoBody.innerHTML = `
