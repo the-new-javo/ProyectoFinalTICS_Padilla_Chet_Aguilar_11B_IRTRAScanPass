@@ -906,16 +906,23 @@
                 speak("Aquí se encuentra la investigación, el marco teórico, subtemas y la relación con los ODS en un archivo de PDF.");
             } 
             else if (type === 'word') {
-                holoTitle.innerText = '// 1. INVESTIGACIÓN (WORD)';
-                holoBody.innerHTML = `
-                    <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
-                        <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
-                            <strong>Documento Word:</strong> Documento complementario con la planificación interna y los borradores editables del proyecto.
-                        </p>
-                        <iframe src="https://intecapedu-my.sharepoint.com/:w:/r/personal/2026-043595_intecap_edu_gt/Documents/docu.docx?d=wd430f19cc862443599bd0b21b7f43828&csf=1&web=1&e=WiOmwf" style="width:100%; flex:1; border:none; background:#000;"></iframe>
-                    </div>`;
-                speak("Abriendo el documento Word con la información complementaria de edición interna.");
-            }
+    holoTitle.innerText = '// 1. INVESTIGACIÓN (WORD)';
+    holoBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; height:100%; gap:15px; justify-content:center; align-items:center; text-align:center;">
+            <p style="font-size: 0.8rem; border-left: 2px solid var(--cyan); padding-left: 8px; margin-bottom: 5px;">
+                <strong>Documento Word:</strong> Documento complementario con la planificación interna y los borradores editables del proyecto.
+            </p>
+            <a href="recursos/docu.docx" download="docu.docx" style="padding: 10px 20px; background: var(--cyan); color: #000; text-decoration: none; font-weight: bold; border-radius: 4px; display:inline-block;">
+                Descargar Documento Word (.docx)
+            </a>
+        </div>`;
+    speak("Iniciando la descarga del documento Word complementario.");
+}
+else if (type === 'pdf') { // O como manejes la condición para el PDF
+    holoTitle.innerText = '// 1. INVESTIGACIÓN (PDF)';
+    holoBody.innerHTML = `
+        <div style="display:flex; flex-direction:column; height:100%; gap:10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding-right: 5px;">
             else if (type === 'circuito') {
                 holoTitle.innerText = '// 2. CIRCUITO (TINKERCAD)';
                 holoBody.innerHTML = `
