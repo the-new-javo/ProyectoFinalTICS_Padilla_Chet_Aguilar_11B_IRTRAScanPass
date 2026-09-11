@@ -939,18 +939,22 @@
             else if (type === 'infografia') {
                 holoTitle.innerText = '// 3. INFOGRAFÍA';
                 holoBody.innerHTML = `
-                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
-                        <img src="recursos/infografia.png" alt="Infografía del Proyecto" style="max-width:100%; max-height:70vh; object-fit:contain; border:1px solid currentColor;">
+                    <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px; width:100%;">
+                        <object data="recursos/infografia.pdf" type="application/pdf" style="width:100%; height:70vh; border:1px solid currentColor;">
+                            <embed src="recursos/infografia.pdf" type="application/pdf" style="width:100%; height:70vh;" />
+                            <p style="text-align:center; font-size:0.9rem;">Tu navegador no soporta la visualización de PDFs. Puedes descargarlo <a href="recursos/infografia.pdf" target="_blank" style="color:inherit; text-decoration:underline;">aquí</a>.</p>
+                        </object>
                         <p style="text-align:center; font-size:0.8rem;">Infografía síntesis que resume visualmente los puntos clave y beneficios del proyecto.</p>
                     </div>`;
-                speak("Visualizando la infografía interactiva de síntesis visual del proyecto.");
+                speak("Visualizando el documento PDF de la infografía del proyecto.");
+}
             }
             else if (type === 'podcast') {
                 holoTitle.innerText = '// 4. PODCAST';
                 holoBody.innerHTML = `
                     <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; gap:15px;">
                         <video controls style="width:100%; max-height:55vh; border:1px solid currentColor; background:#000;">
-                            <source src="recursos/podcast.mp4" type="video/mp4">
+                            <source src="recursos/pc.mp4" type="video/mp4">
                             Tu navegador no soporta video.
                         </video>
                         <p style="text-align:center; font-size:0.8rem;">Reproduciendo el podcast oficial explicando a detalle la propuesta tecnológica del equipo.</p>
